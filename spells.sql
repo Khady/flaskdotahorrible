@@ -1,5 +1,5 @@
-drop table if exists entries;
-create table entries (
+drop table if exists spells;
+create table spells (
          id integer primary key autoincrement not null unique,
 	 nam varchar not null,
 	 des varchar not null,

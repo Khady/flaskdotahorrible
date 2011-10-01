@@ -1,5 +1,5 @@
-drop table if exists entries;
-create table entries (
+drop table if exists hero;
+create table hero (
          id integer primary key autoincrement not null unique,
 	 nam varchar not null,
 	 typ integer not null,

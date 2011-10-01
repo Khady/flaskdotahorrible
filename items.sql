@@ -1,5 +1,5 @@
-drop table if exists entries;
-create table entries (
+drop table if exists items;
+create table items (
          id integer primary key autoincrement not null unique,
 	 nam varchar not null,
 	 price integer not null,
