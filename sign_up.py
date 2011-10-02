@@ -10,7 +10,7 @@ from flask import Flask, request, session, g, redirect, url_for, \
 from hashlib import sha1
 
 # configuration
-USER_DB = '/tmp/test.db'
+USER_DB = '/tmp/test.bd'
 DEBUG = True
 SECRET_KEY = 'development key'
 
@@ -22,47 +22,54 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 def connect_db(base):
     return sqlite3.connect(base)
 
-@app.route('/sign_up', methods=['POST'])
+@app.route('/', methods=['GET'])
+def default():
+    return render_template('sign_up.html', error=None)
+
+@app.route('/signup', methods=['GET', 'POST'])
 def add_user():
     error = None
-    connect_db(app.config['USER_DB'])
-    if session.get('logged_in'):
-        error = 'You are already member'
-        return render_template('sign_up.html', error=error)
+    if request.method == 'POST':
+        connect_db(app.config['USER_DB'])
+        if session.get('logged_in'):
+            error = 'You are already member'
+            return render_template('sign_up.html', error=error)
 
-    # Recupere les informations de l'utilisateur dans la page
-    login = request.form['login']
-    password = request.form['password']
-    pass_hash = sha1(password.encode('utf-8')).hexdigest()
-    mail = request.form['mail'].lower()
-    date = time.strftime('%Y-%m-%d',time.localtime())
+        # Recupere les informations de l'utilisateur dans la page
+        login = request.form['login']
+        password = request.form['password']
+        pass_hash = sha1(password.encode('utf-8')).hexdigest()
+        mail = request.form['mail'].lower()
+        date = time.strftime('%Y-%m-%d',time.localtime())
 
-    # verifie la validite des informations
-    users = g.db.execute("select 'login', 'mail' from user_description")
-    entries = [dict(login=row[0], mail=row[1]) for row in users.fetchall()]
-    for elem in entries:
-        error = ""        
-        if login.lower() == elem['login'].lower():
-            error = "login already exist "
-            break
-        elif mail == elem['mail'].lower():
-            error += "mail already exist"
-            break
-        else:
-            error = None
+        # verifie la validite des informations
+        users = g.db.execute("select 'login', 'mail' from user_description")
+        entries = [dict(login=row[0], mail=row[1]) for row in users.fetchall()]
+        for elem in entries:
+            error = ""        
+            if login.lower() == elem['login'].lower():
+                error = "login already exist "
+                break
+            elif mail == elem['mail'].lower():
+                error += "mail already exist"
+                break
+            else:
+                error = None
 
-    if error != None:
-        return render_template('sign_up.html', error=error)
+        if error != None:
+            return render_template('sign_up.html', error=error)
 
-    # met les informations dans la DB
-    g.db.execute("insert into user_description ('login', 'hash', 'date_create', \
+        # met les informations dans la DB
+        g.db.execute("insert into user_description ('login', 'hash', 'date_create', \
 'mail', 'avatar', 'valid') values (?, ?, ?, ?, ?, ?)",
-                 [login, pass_hash, date, mail, None, 1])
-    g.db.commit()
-    g.db.close()
-
-    flash('Welcome to Dota 2 Arena')
-    return redirect(url_for('login'))
+                     [login, pass_hash, date, mail, None, 1])
+        g.db.commit()
+        g.db.close()
+    
+        flash('Welcome to Dota 2 Arena')
+        return redirect(url_for('login'))
+    
+    return render_template('sign_up.html', error=error)
 
 
 @app.route('/activate', methods=['GET', 'POST'])
@@ -89,7 +96,7 @@ def login():
                 session['logged_in'] = True
                 flash('You were logged in')
                 g.db.close()
-                return redirect(url_for('/'))
+                return redirect(url_for('default'))
     
             # probleme dans l'identification
             error="invalid login or password"
