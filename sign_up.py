@@ -24,16 +24,17 @@ def connect_db(base):
 
 @app.route('/', methods=['GET'])
 def default():
+    flash('Welcome to Dota 2 Arena')
     return render_template('sign_up.html', error=None)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def add_user():
     error = None
+    # if session.get('logged_in'):
+    #     error = 'You are already member'
+    #     return render_template('sign_up.html', error=error)
     if request.method == 'POST':
-        connect_db(app.config['USER_DB'])
-        if session.get('logged_in'):
-            error = 'You are already member'
-            return render_template('sign_up.html', error=error)
+        g.db = connect_db(app.config['USER_DB'])
 
         # Recupere les informations de l'utilisateur dans la page
         login = request.form['login']
@@ -68,9 +69,8 @@ def add_user():
     
         flash('Welcome to Dota 2 Arena')
         return redirect(url_for('login'))
-    
-    return render_template('sign_up.html', error=error)
 
+    return render_template('sign_up.html', error=error)
 
 @app.route('/activate', methods=['GET', 'POST'])
 def activate_user():
@@ -81,7 +81,7 @@ def activate_user():
 def login():
     error = None
     if request.method == 'POST':
-        connect_db(app.config['USER_DB'])
+        g.db = connect_db(app.config['USER_DB'])
 
         # on recupere les infos
         login = request.form['login']
@@ -89,17 +89,18 @@ def login():
         pass_hash = sha1(password.encode('utf-8')).hexdigest()
 
         # on regarde si le login et mdp sont OK
-        cur = g.db.execute("select 'login', 'hash' from user_description where valid == 1")
+        cur = g.db.execute("select login, hash from user_description where valid == 1")
         entries = [dict(login=row[0], hash_bd=row[1]) for row in cur.fetchall()]
         for elem in entries:
+            print ('%s %s %s %s' % (login.lower(), elem['login'].lower(), pass_hash, elem['hash_bd']))
             if login.lower() == elem['login'].lower() and pass_hash == elem['hash_bd']:
                 session['logged_in'] = True
                 flash('You were logged in')
                 g.db.close()
                 return redirect(url_for('default'))
     
-            # probleme dans l'identification
-            error="invalid login or password"
+        # probleme dans l'identification
+        error="invalid login or password"
 
     return render_template('login.html', error=error)
 
@@ -108,7 +109,7 @@ def login():
 def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
-    return redirect(url_for('/'))
+    return redirect(url_for('default'))
 
 
 if __name__ == '__main__':
