@@ -5,6 +5,6 @@ create table user_description (
   hash varchar not null,
   date_create date not null,
   mail varchar not null,
-  avatar varchar not null,
+  avatar varchar,
   valid integer not null
 );

@@ -20,5 +20,5 @@ create table hero (
 	 vision varchar not null,
 	 armor integer not null,
 	 aspeed integer not null,
-	 ms integer not null,
-};
+	 ms integer not null
+);

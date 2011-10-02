@@ -20,4 +20,4 @@ create table items (
 	 aura varchar,
 	 cap_pas varchar,
 	 cap_act varchar
-};
+);
