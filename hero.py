@@ -1,5 +1,5 @@
 import sqlite3
-from flask import render_template, g, url_for
+from flask import render_template, g, url_for, redirect
 
 def connect_db():
     return sqlite3.connect('dota2.db')
@@ -21,4 +21,6 @@ def Hero(name=None):
                         anim_speed=row[16], vision=row[17], armor=row[18], aspeed=row[19],
                         ms=row[20]) for row in cur.fetchall()]
         g.db.close()
+        if len(entries) == 0:
+            return redirect(url_for('hero'))
         return render_template('hero.html', entries = entries, )
