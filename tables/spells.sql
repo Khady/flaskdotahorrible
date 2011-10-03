@@ -8,5 +8,6 @@ create table spells (
 	 mana_cost integer,
 	 life_cost integer,
 	 aoe integer,
-	 effect varchar not null
+	 effect varchar not null,
+	 nb_skills integer not null
 );
