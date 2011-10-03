@@ -1,16 +1,22 @@
 from flask import Flask, url_for
-from hero import Hero
 
+# configuration
+USER_DB = 'dota2.db'
+DEBUG = True
+SECRET_KEY = 'development key'
+
+# create our little application :)
 app = Flask(__name__)
+app.config.from_object(__name__)
+app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
+from sign_up import *
+from hero import *
 
-@app.route('/hero/')
-@app.route('/hero/<name>')
-def hero(name=None):
-    return Hero(name)
+@app.route('/', methods=['GET'])
+def default():
+    flash('Welcome to Dota 2 Arena')
+    return render_template('sign_up.html', error=None)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+    app.run()

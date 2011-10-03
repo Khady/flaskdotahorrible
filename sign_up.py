@@ -5,27 +5,14 @@ import sqlite3
 import time
 
 from contextlib import closing
-from flask import Flask, request, session, g, redirect, url_for, \
+from flask import request, session, g, redirect, url_for, \
      abort, render_template, flash
 from hashlib import sha1
+from dota2 import app
 
-# configuration
-USER_DB = '/tmp/test.bd'
-DEBUG = True
-SECRET_KEY = 'development key'
-
-# create our little application :)
-app = Flask(__name__)
-app.config.from_object(__name__)
-app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 def connect_db(base):
     return sqlite3.connect(base)
-
-@app.route('/', methods=['GET'])
-def default():
-    flash('Welcome to Dota 2 Arena')
-    return render_template('sign_up.html', error=None)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def add_user():
@@ -110,7 +97,3 @@ def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
     return redirect(url_for('default'))
-
-
-if __name__ == '__main__':
-    app.run()
