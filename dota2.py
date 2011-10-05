@@ -12,6 +12,7 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 from sign_up import *
 from hero import *
+from post_hero import *
 
 @app.route('/', methods=['GET'])
 def default():

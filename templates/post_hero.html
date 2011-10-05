@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Sign Up</h2>
+  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+  <form action="{{ url_for('post_hero') }}" method=post>
+    <dl>
+      <dt>Nom du Hero:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['nam'] }}" {% endif %} name="nam">
+      <dt>Type de Hero:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['typ'] }}" {% endif %} name="typ">
+      <dt>Description:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['des'] }}" {% endif %} name="des">
+      <dt>Biographie:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['bio'] }}" {% endif %} name="bio">
+      <dt>Force de depart:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['str_start'] }}" {% endif %} name="str_start">
+      <dt>Agilite de depart:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['agi_start'] }}" {% endif %} name="agi_start">
+      <dt>Inteligence de depart:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['int_start'] }}" {% endif %} name="int_start">
+      <dt>Force par niveau:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['str_lvl'] }}" {% endif %} name="str_lvl">
+      <dt>Agilite par niveau:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['ago_lvl'] }}" {% endif %} name="agi_lvl">
+      <dt>Inteligence par niveau:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['int_lvl'] }}" {% endif %} name="int_lvl">
+      <dt>Vie:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['life'] }}" {% endif %} name="life">
+      <dt>Mana:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['mana'] }}" {% endif %} name="mana">
+      <dt>Degat:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['damages'] }}" {% endif %} name="damages">
+      <dt>Portee:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['rang'] }}" {% endif %} name="range">
+      <dt>Vitesse d'incantation:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['cast_speed'] }}" {% endif %} name="cast_speed">
+      <dt>Vitesse de l'annimation:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['anim_speed'] }}" {% endif %} name="anim_speed">
+      <dt>Vision:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['vision'] }}" {% endif %} name="vision">
+      <dt>Armure:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['armor'] }}" {% endif %} name="armor">
+      <dt>Vitesse d'attaque:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['aspeed'] }}" {% endif %} name="aspeed">
+      <dt>Vitesse de Deplacement:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['ms'] }}" {% endif %} name="ms">
+      <dd><input type=submit value="Validation">
+    </dl>
+  </form>
+{% endblock %}
