@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Dota2 Hero list!</h1>
+<h2>Liste des Heros:</h2>
 <p>
   {% for i in range(len) %}
   <a href= "{{ url_for('hero', name=entries[i]['name']) }}">{{ entries[i]['name'] }}</a><br/>
