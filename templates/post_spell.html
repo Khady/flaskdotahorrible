@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Creation des Spells</h2>
+  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+  {% if name==None%}
+  <form action="{{ url_for('post_spell') }}" method=post>
+   <p>
+       <label for="hero">Quel hero voulez vous modifier les sorts?</label><br />
+       <select name="hero" id="hero">
+	   {% for i in range(len) %}
+           <option value="{{ entries[i]['name'] }}">{{ entries[i]['name'] }}</option>
+	   {% endfor %}
+       </select>
+   </p>
+   <input type=submit value="Validation">
+  </form>
+  {% else %}
+  success
+{% endif %}
+{% endblock %}

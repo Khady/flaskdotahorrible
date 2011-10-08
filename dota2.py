@@ -12,6 +12,8 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 from sign_up import *
 from hero import *
+from post_hero import *
+from post_spell import *
 
 @app.route('/', methods=['GET'])
 def default():
@@ -19,4 +21,4 @@ def default():
     return render_template('sign_up.html', error=None)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
