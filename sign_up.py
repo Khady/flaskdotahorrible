@@ -21,6 +21,19 @@ def random_string(length=None):
     length = length or random.randint(6,24)
     return ''.join(random.sample(chars, length))
 
+def valid_user(code_val):
+    cur = g.db.execute('select id from user_validation where code_val == ?', [code_val])
+    entries = [dict(user_id=row[0]) for row in cur.fetchall()]
+    if len(entries) != 0:
+        g.db.execute('update user_description set valid = 1 where id == ?', [entries[0]['user_id']])
+        g.db.execute('delete from user_validation where id == ?',  [entries[0]['user_id']])
+        g.db.commit()
+        flash('account activated')
+        return redirect(url_for('default'))
+    else:
+        flash("code d'activation invalide")
+        return render_template('activate.html')
+
 @app.route('/signup', methods=['GET', 'POST'])
 def add_user():
     error = None
@@ -68,9 +81,8 @@ def add_user():
                      [entries[0]['user_id'], code_val])
         g.db.commit()
         # on donne le code a l'utilisateur
-#        Mail.send(mail, "Validation compte Dota 2 Arena",
-#                  ("Voici votre url d'activation\nhttp://dota2arena.com%s\n" % url_for('activate', code_val = code_val)))
-        print ("Voici votre url d'activation\nhttp://dota2arena.com%s\n" % url_for('activate', code_val = code_val))
+        Mail.send(mail, "Validation compte Dota 2 Arena",
+                  ("Voici votre url d'activation\nhttp://dota2arena.com%s\n" % url_for('activate', code_val = code_val)))
 
         g.db.close()
         flash('Welcome to Dota 2 Arena')
@@ -78,23 +90,17 @@ def add_user():
 
     return render_template('sign_up.html', error=error)
 
-@app.route('/activate', methods=['GET', 'POST'])
-@app.route('/activate/<code_val>', methods=['GET'])
+@app.route('/activate')
+@app.route('/activate/<code_val>')
 def activate(code_val=None):
     g.db = connect_db(app.config['USER_DB'])
-    if code_val != None:
-        cur = g.db.execute('select id from user_validation where code_val == ?', [code_val])
-        entries = [dict(user_id=row[0]) for row in cur.fetchall()]
-        if len(entries) != 0:
-            g.db.execute('update user_description set valid = 1 where id == ?', [entries[0]['user_id']])
-            g.db.commit()
-        flash('account activated')
-        return redirect(url_for('default'))
-    if request.method == 'POST':
-        pass
+    if (request.method == 'GET' and code_val != None):
+        return valid_user(code_val)
+    elif request.method == 'POST':
+        code_val = request.form['code_val']
+        return valid_user(code_val)
     else:
-        pass
-    return render_template('activate.html', error=error)
+        return render_template('activate.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])

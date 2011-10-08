@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Activer compte</h2>
+  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+  <form action="{{ url_for('add_user') }}" method=post>
+    <dl>
+      <dt>Code d'activation:
+      <dd><input type=text name=code_val>
+      <dd><input type=submit value="Valider">
+      </dl>
+  </form>
+{% endblock %}
