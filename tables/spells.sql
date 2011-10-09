@@ -1,7 +1,7 @@
 drop table if exists spells;
 create table spells (
          id integer primary key autoincrement not null unique,
-	 id_hero integer not null,
+	 name_hero varchar not null,
 	 nam varchar not null,
 	 des varchar not null,
 	 abi_type varchar not null,

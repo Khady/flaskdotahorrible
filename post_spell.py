@@ -16,19 +16,27 @@ def post_spell(name=None):
             cur = g.db.execute('select nam from hero')
             entries = [dict(name=row[0]) for row in cur.fetchall()]
             g.db.close()
-            return render_template('post_spell.html', name=name, entries=entries, len=len(entries), i = 0)
+            return render_template('post_spell.html', name=name, entries=entries, len=len(entries), i=0)
     else:
         if (request.method == 'POST'):
             g.db = connect_db(app.config['USER_DB'])
-            g.db.execute('insert into hero (nam, typ, des, bio, str_start, agi_start, int_start, str_lvl, agi_lvl, int_lvl, life, mana, damages, range, cast_speed, anim_speed, vision, armor, asped, ms) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                         [request.form['nam'], request.form['typ'], request.form['des'],
-                          request.form['bio'], request.form['str_start'],
-                          request.form['agi_start'], request.form['int_start'],
-                          request.form['str_lvl'], request.form['agi_lvl'],
-                          request.form['int_lvl'], request.form['life'],
-                          request.form['mana'], request.form['damages'], request.form['range'],
-                          request.form['cast_speed'], request.form['anim_speed'],
-                          request.form['vision'], request.form['armor'], request.form['aspeed'],
-                          request.form['ms']])
+            if request.form['modif'] == '1':
+                g.db.execute('insert into spells (name_hero, nam, des, abi_type, tar_type, allo_tar, pos) values (?, ?, ?, ?, ?, ?, ?)',
+                             [name, request.form['nam_skill1'], request.form['des_skill1'],
+                              request.form['abi_type_skill1'], request.form['tar_type_skill1'],
+                              request.form['allo_tar_skill1'], request.form['pos_skill1']])
+            else:
+                g.db.execute('update spells set nam = ?, des = ?, abi_type = ?, tar_type = ?, allo_tar = ?, pos = ? where name_hero like ?',
+                             [request.form['nam_skill1'], request.form['des_skill1'],
+                              request.form['abi_type_skill1'], request.form['tar_type_skill1'],
+                              request.form['allo_tar_skill1'], request.form['pos_skill1'], name])
+            g.db.commit()
             g.db.close()
-        return render_template('post_spell.html', name=name)
+            return redirect(url_for('hero', name=name))
+        else:
+            g.db = connect_db(app.config['USER_DB'])
+            cur = g.db.execute('select * from spells where name_hero like ? order by pos asc', [name])
+            entries = [dict(id_spell=row[0], name_hero=row[1], nam=row[2], des=row[3], abi_type=row[4],
+                            tar_type=row[5], allo_tar=row[6], pos=row[7]) for row in cur.fetchall()]
+            g.db.close()
+            return render_template('post_spell.html', name=name, entries=entries)

@@ -24,9 +24,7 @@ def hero(name=None):
                         ms=row[20]) for row in cur.fetchall()]
         if len(entries) == 0:
             return redirect(url_for('hero'))
-        cur = g.db.execute('select * from spells where id_hero = ?', [entries[0]['id_hero']])
-        spells = [dict(id_spell=[0], name=row[1], des=row[2], cd=row[3], rang=row[4],
-                      mana_count=row[5], life_count=row[6], aoe=row[7],
-                      effect=row[8], nb_skills=row[9]) for row in cur.fetchall()]
+        cur = g.db.execute('select * from spells where name_hero = ?', [entries[0]['name']])
+        spells = [dict(id_spell=[0], name=row[1]) for row in cur.fetchall()]
         g.db.close()
         return render_template('hero.html', entries = entries, spells = spells)
