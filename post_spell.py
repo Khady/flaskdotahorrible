@@ -22,14 +22,14 @@ def post_spell(name=None):
             g.db = connect_db(app.config['USER_DB'])
             if request.form['modif'] == '1':
                 g.db.execute('insert into spells (name_hero, nam, des, abi_type, tar_type, allo_tar, pos) values (?, ?, ?, ?, ?, ?, ?)',
-                             [name, request.form['nam_skill1'], request.form['des_skill1'],
-                              request.form['abi_type_skill1'], request.form['tar_type_skill1'],
-                              request.form['allo_tar_skill1'], request.form['pos_skill1']])
+                             [name, request.form['nam_skill'], request.form['des_skill'],
+                              request.form['abi_type_skill'], request.form['tar_type_skill'],
+                              request.form['allo_tar_skill'], request.form['pos_skill']])
             else:
                 g.db.execute('update spells set nam = ?, des = ?, abi_type = ?, tar_type = ?, allo_tar = ?, pos = ? where name_hero like ?',
-                             [request.form['nam_skill1'], request.form['des_skill1'],
-                              request.form['abi_type_skill1'], request.form['tar_type_skill1'],
-                              request.form['allo_tar_skill1'], request.form['pos_skill1'], name])
+                             [request.form['nam_skill'], request.form['des_skill'],
+                              request.form['abi_type_skill'], request.form['tar_type_skill'],
+                              request.form['allo_tar_skill'], request.form['pos_skill'], name])
             g.db.commit()
             g.db.close()
             return redirect(url_for('hero', name=name))
