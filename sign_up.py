@@ -34,6 +34,19 @@ def valid_user(code_val):
         flash("code d'activation invalide")
         return render_template('activate.html')
 
+
+@app.route('/activate')
+@app.route('/activate/<code_val>')
+def activate(code_val=None):
+    g.db = connect_db(app.config['USER_DB'])
+    if (request.method == 'GET' and code_val != None):
+        return valid_user(code_val)
+    elif request.method == 'POST':
+        code_val = request.form['code_val']
+        return valid_user(code_val)
+    else:
+        return render_template('activate.html')
+
 @app.route('/signup', methods=['GET', 'POST'])
 def add_user():
     error = None
@@ -81,27 +94,14 @@ def add_user():
                      [entries[0]['user_id'], code_val])
         g.db.commit()
         # on donne le code a l'utilisateur
-        Mail.send(mail, "Validation compte Dota 2 Arena",
-                  ("Voici votre url d'activation\nhttp://dota2arena.com%s\n" % url_for('activate', code_val = code_val)))
+        #Mail.send(mail, "Validation compte Dota 2 Arena",
+        #          ("Voici votre url d'activation\nhttp://dota2arena.com%s\n" % url_for('activate', code_val = code_val)))
+        print    ("Voici votre url d'activation\nhttp://dota2-arena.com%s\n" % url_for('activate', code_val = code_val))
 
         g.db.close()
         flash('Welcome to Dota 2 Arena')
         return redirect(url_for('login'))
-
     return render_template('sign_up.html', error=error)
-
-@app.route('/activate')
-@app.route('/activate/<code_val>')
-def activate(code_val=None):
-    g.db = connect_db(app.config['USER_DB'])
-    if (request.method == 'GET' and code_val != None):
-        return valid_user(code_val)
-    elif request.method == 'POST':
-        code_val = request.form['code_val']
-        return valid_user(code_val)
-    else:
-        return render_template('activate.html')
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -115,12 +115,13 @@ def login():
         pass_hash = sha1(password.encode('utf-8')).hexdigest()
 
         # on regarde si le login et mdp sont OK
-        cur = g.db.execute("select user, login, hash from user_description where valid == 1")
+        cur = g.db.execute("select id, login, hash from user_description where valid == 1")
         entries = [dict(user=row[0], login=row[1], hash_bd=row[2]) for row in cur.fetchall()]
         for elem in entries:
             if login.lower() == elem['login'].lower() and pass_hash == elem['hash_bd']:
                 session['logged_in'] = True
-                session['user'] = elem['user']
+                session['user_login'] = elem['login']
+                session['user_id'] = elem['user']
                 flash('You were logged in')
                 g.db.close()
                 return redirect(url_for('default'))

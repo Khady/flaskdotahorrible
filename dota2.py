@@ -4,6 +4,7 @@ from flask import Flask, url_for
 USER_DB = 'dota2.db'
 DEBUG = True
 SECRET_KEY = 'development key'
+SITEURL = "http://dota2-arena.com/"
 
 # create our little application :)
 app = Flask(__name__)
@@ -14,6 +15,7 @@ from sign_up import *
 from hero import *
 from post_hero import *
 from post_spell import *
+from groups import *
 
 @app.route('/', methods=['GET'])
 def default():
