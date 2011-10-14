@@ -21,5 +21,37 @@
   {{ entries[0]["armor"] }}<br/>
   {{ entries[0]["aspeed"] }}<br/>
   {{ entries[0]["ms"] }}<br/>
+  {% for spell in spells %}
+  {{ spell["name"] }}<br/>
+  {{ spell["des"] }}<br/>
+  {{ spell["abi_type"] }}<br/>
+  {{ spell["allo_tar"] }}<br/>
+       <table>
+       <tr>
+	 <th>Niveau du sort</th>
+	 <th>Cooldown</th>
+	 <th>Portee</th>
+	 <th>Cout en mana</th>
+	 <th>Cout en vie</th>
+	 <th>Zone d'Effet</th>
+	 <th>Effet</th>
+       </tr>
+       {% for des in spell_des %}
+       {% for elem in des %}
+       {% if elem["id_spell"] == spell["id_spell"] %}
+       <tr>
+	 <td>LvL {{elem["lvl_spell"]}}</td>
+	 <td>{{elem["cd"]}}</td>
+	 <td>{{elem["rang"]}}</td>
+	 <td>{{elem["mana_cost"]}}</td>
+	 <td>{{elem["life_cost"]}}</td>
+	 <td>{{elem["aoe"]}}</td>
+	 <td>{{elem["effect"]}}</td>
+       </tr>
+       {% endif %}
+       {% endfor %}
+       {% endfor %}
+     </table>
+  {% endfor%}
 </p>
 {% endblock %}
