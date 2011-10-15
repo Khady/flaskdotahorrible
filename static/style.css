@@ -1,0 +1,44 @@
+body
+{
+   width: 800px;
+   margin: auto;
+   margin-bottom: 20px;
+   background-color: #172025;
+}
+
+/* L'en-tête */
+
+#en_tete
+{
+   width: 800px;
+   height: 200px;
+   background-image: url("images/banniere.png");
+   background-repeat: no-repeat;
+}
+
+#connection
+{
+   /*margin-left: 140px;
+   margin-bottom: 20px;*/
+   padding: 5px;
+   
+   /*color: #B3B3B3;*/
+   background-color: #8c9093;
+}
+
+#corps
+{
+   /*margin-left: 140px;
+   margin-bottom: 20px;*/
+   padding: 5px;
+   
+   /*color: #B3B3B3;*/
+   background-color: #8c9093;
+}
+
+#corps h2
+{
+   color: #d12833;
+   text-align: center;
+   font-family: Arial, "Arial Black", "Times New Roman", Times, serif;
+}

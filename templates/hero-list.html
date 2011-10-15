@@ -3,7 +3,7 @@
 <h2>Liste des Heros:</h2>
 <p>
   {% for request in entries %}
-  <a href= "{{ url_for('hero', name=request['name']) }}">{{ request['name'] }}</a><br/>
+  <a href= "{{ url_for('hero', name=request['name']) }}"><img src="{{ url_for('static', filename='hero/'+request['name']+'.jpg') }}" alt="Lina" /></a><br/>
   {% endfor %}
 </p>
 {% endblock %}

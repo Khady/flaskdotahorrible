@@ -1,17 +1,38 @@
-<!doctype html>
-<title>Dota 2 Arena</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-<div class=page>
-  <h1>Dota2 Arena</h1>
-  <div class=metanav>
-  {% if not session.logged_in %}
-    <a href="{{ url_for('login') }}">log in</a>
-  {% else %}
-    <a href="{{ url_for('logout') }}">log out</a>
-  {% endif %}
-  </div>
-  {% for message in get_flashed_messages() %}
-    <div class=flash>{{ message }}</div>
-  {% endfor %}
-  {% block body %}{% endblock %}
-</div>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" >
+  <head>
+    <title>Dota 2 Arena</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    </head>
+  
+  <body>
+    <div id="en_tete">
+      
+    </div>
+    
+    <div id="menu">
+      
+    </div>
+    
+    <div id="connection">
+      {% if not session.logged_in %}
+      <a href="{{ url_for('login') }}">log in</a>
+      {% else %}
+      <a href="{{ url_for('logout') }}">log out</a>
+      {% endif %}
+    </div> 
+    
+    <div id="corps">
+      {% for message in get_flashed_messages() %}
+      <div class=flash>{{ message }}</div>
+      {% endfor %}
+      {% block body %}{% endblock %}
+    </div>
+    
+    <div id="pied_de_page">
+      
+    </div>
+    
+  </body>
+</html>
