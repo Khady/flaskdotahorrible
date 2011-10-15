@@ -16,6 +16,7 @@ from hero import *
 from post_hero import *
 from post_spell import *
 from groups import *
+from item import *
 
 @app.route('/', methods=['GET'])
 def default():
