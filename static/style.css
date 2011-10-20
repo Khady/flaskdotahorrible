@@ -33,12 +33,15 @@ body
    padding: 5px;
    
    /*color: #B3B3B3;*/
+   color: #340a0d;
    background-color: #8c9093;
+   font-family: sans-serif, "Arial Black", "Times New Roman", Times, serif;
 }
 
 #corps h2
 {
    color: #d12833;
    text-align: center;
-   font-family: Arial, "Arial Black", "Times New Roman", Times, serif;
+   font-family: sans-serif, "Arial Black", "Times New Roman", Times, serif;
+   text-decoration: underline;
 }

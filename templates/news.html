@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block body %}
+{% for ret in entries %}
+<h2>{{ ret["titre"] }}</h2>
+<p>
+  {{ ret["auteur"] }}
+</p>
+{{ ret["news"] }}
+{% endfor %}
+{% endblock %}

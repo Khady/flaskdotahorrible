@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Creation de news</h2>
+  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+  {% if prevu == 1 %} 
+  {{ titre }}<br/>
+  {{ news }}<br/>
+  {{ tag }}<br/>
+  {% endif %}
+  {% if id_news %} 
+  <form action="{{ url_for('post_news', id_news=id_news) }}" method=post>
+  {% else %} 
+  <form action="{{ url_for('post_news') }}" method=post>
+  {% endif %}
+    <dl>
+      <dt>Titre:
+      <dd><input type=text {% if entries %} value="{{ entries['titre'] }}" {% endif %} name="titre">
+      <dt><label for="news">Contenu:</label>
+      <dd><textarea name="news" id="news" rows="40" cols="100">{% if entries %}{{ entries['news'] }}{% endif %}</textarea>
+      <dt>Tag:
+      <dd><input type=text {% if entries %} value="{{ entries['tag'] }}" {% endif %} name="tag">
+      <dd><input type="submit" name="mode_post" value="Previsualisation"><input type="submit" name="mode_post" value="Validation">
+    </dl>
+  </form>
+{% endblock %}

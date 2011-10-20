@@ -1,4 +1,4 @@
-from flask import Flask, url_for
+from flask import Flask, url_for, redirect
 
 # configuration
 USER_DB = 'dota2.db'
@@ -17,11 +17,13 @@ from post_hero import *
 from post_spell import *
 from groups import *
 from item import *
+from post_news import *
+from news import *
 
 @app.route('/', methods=['GET'])
 def default():
-    flash('Welcome to Dota 2 Arena')
-    return render_template('sign_up.html', error=None)
+    flash('Bienvenue sur Dota 2 Arena')
+    return news()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
