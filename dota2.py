@@ -15,9 +15,10 @@ from sign_up import *
 from hero import *
 from post_hero import *
 from post_spell import *
+from post_news import *
+from post_item import *
 from groups import *
 from item import *
-from post_news import *
 from news import *
 
 @app.route('/', methods=['GET'])

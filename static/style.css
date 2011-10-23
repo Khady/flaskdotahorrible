@@ -6,6 +6,36 @@ body
    background-color: #172025;
 }
 
+a
+{
+    color: #d12833;
+    text-decoration:none;
+}
+
+a:visited
+{
+    color: #d12833;
+    text-decoration:none;
+}
+
+a:active
+{
+    color: #d12833;
+    text-decoration:none;
+}
+
+a:link
+{
+    color: #d12833;
+    text-decoration:none;
+}
+
+#corps a:hover
+{
+    color: #d12833;
+    text-decoration:underline;
+}
+
 /* L'en-tête */
 
 #en_tete
@@ -14,6 +44,11 @@ body
    height: 200px;
    background-image: url("images/banniere.png");
    background-repeat: no-repeat;
+}
+
+#menu
+{
+    background-color: #8c9093;
 }
 
 #connection

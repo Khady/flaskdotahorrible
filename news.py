@@ -13,7 +13,6 @@ def connect_db(base):
 @app.route('/news/page/<int:page>', methods=['GET', 'POST'])
 def news(id_news=None, page=None):
     if (id_news != None):
-        print 'lol'
         g.db = connect_db(app.config['USER_DB'])
         cur = g.db.execute('select * from news where id = ?', [id_news])
         entries = [dict(titre=row[1], auteur=row[2],
@@ -29,5 +28,6 @@ def news(id_news=None, page=None):
         g.db = connect_db(app.config['USER_DB'])
         cur = g.db.execute('select * from news limit ?, 10',[(page * 10) - 10])
         entries = [dict(titre=row[1], auteur=row[2],
-                        tag=row[3], news=Markup(row[4])) for row in cur.fetchall()]
+                        tag=row[3],
+                        news=Markup(row[5])) for row in cur.fetchall()]
         return render_template('news.html', entries=entries)

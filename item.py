@@ -20,9 +20,10 @@ def item(name=None):
                         recette=row[3], use_in=row[4], des=row[5],
                         str_stat=row[6], agi_stat=row[7], int_stat=row[8],
                         armor=row[9], aspeed=row[10], ms=row[11], life=row[12],
-                        mana=row[13], reg_life=row[14], reg_mana=row[15],
-                        orb=row[16], aura=row[17], cap_pas=row[18],
-                        cap_act=row[19]) for row in cur.fetchall()]
+                        mana=row[13], damages=row[14], reg_life=row[15],
+                        reg_mana=row[16],
+                        orb=row[17], aura=row[18], cap_pas=row[19],
+                        cap_act=row[20]) for row in cur.fetchall()]
         if len(entries) == 0:
             g.db.close()
             return redirect(url_for('item'))

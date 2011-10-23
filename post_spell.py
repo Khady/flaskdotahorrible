@@ -1,6 +1,7 @@
 import sqlite3
-from flask import render_template, g, url_for, redirect, request
+from flask import render_template, g, url_for, redirect, request, session
 from dota2 import app
+from droits import get_droits
 
 def connect_db(base):
     return sqlite3.connect(base)
@@ -125,56 +126,68 @@ def post_spell_lvl4(entries):
 @app.route('/post_spell/', methods=['GET', 'POST'])
 @app.route('/post_spell/<name>', methods=['GET', 'POST'])
 def post_spell(name=None):
-    if name == None:
-        if (request.method == 'POST'):
-            return redirect(url_for('post_spell',
-                                    name = request.form['hero'],
-                                    pos = request.form['spell']))
-        else:
-            g.db = connect_db(app.config['USER_DB'])
-            cur = g.db.execute('select nam from hero')
-            entries = [dict(name=row[0]) for row in cur.fetchall()]
-            g.db.close()
-            return render_template('post_spell.html', name=name,
-                                   entries=entries, len=len(entries), i=0)
-    else:
-        if (request.method == 'POST'):
-            g.db = connect_db(app.config['USER_DB'])
-            if request.form['modif'] == '1':
-                add_spell_base(name)            
+    if 'logged_in' in session:
+        uid = session['user_id']
+        g.db = connect_db(app.config['USER_DB'])
+        droits = get_droits(uid)
+        g.db.close()
+        if droits['adm'] == 1:
+            if name == None:
+                if (request.method == 'POST'):
+                    return redirect(url_for('post_spell',
+                                            name = request.form['hero'],
+                                            pos = request.form['spell']))
+                else:
+                    g.db = connect_db(app.config['USER_DB'])
+                    cur = g.db.execute('select nam from hero')
+                    entries = [dict(name=row[0]) for row in cur.fetchall()]
+                    g.db.close()
+                    return render_template('post_spell.html', name=name,
+                                           entries=entries, len=len(entries),
+                                           i=0)
             else:
-                update_spell_base(name)
-            cur = g.db.execute('select * from spells where name_hero like ? and pos = ?', [name, request.form['pos_skill']])
-            entries = [dict(id_spell=row[0],
-                            pos=row[7]) for row in cur.fetchall()]
-            post_spell_lvl1(entries)
-            post_spell_lvl2(entries)
-            post_spell_lvl3(entries)
-            post_spell_lvl4(entries)
-            g.db.close()
-            return redirect(url_for('hero', name=name))
-        else:
-            g.db = connect_db(app.config['USER_DB'])
-            searchword = request.args.get('pos', '')
-            if searchword != '':
-                pos = int(searchword)
-            else:
-                pos = 1
-            cur = g.db.execute('select * from spells where name_hero like ? and pos = ? order by pos asc', [name, pos])
-            entries = [dict(id_spell=row[0], name_hero=row[1],
-                            nam=row[2], des=row[3], abi_type=row[4],
-                            tar_type=row[5], allo_tar=row[6],
-                            pos=row[7]) for row in cur.fetchall()]
-            spell1 = recup_spell(1, entries)
-            spell2 = recup_spell(2, entries)
-            spell3 = recup_spell(3, entries)
-            spell4 = recup_spell(4, entries)
-            g.db.close()
-            print len(entries)
-            return render_template('post_spell.html', name=name,
-                                   entries=entries,
-                                   len_entries=len(entries), pos=pos,
-                                   spell1=spell1, len_spell1=len(spell1),
-                                   spell2=spell2, len_spell2=len(spell2),
-                                   spell3=spell3, len_spell3=len(spell3),
-                                   spell4=spell4, len_spell4=len(spell4))
+                if (request.method == 'POST'):
+                    g.db = connect_db(app.config['USER_DB'])
+                    if request.form['modif'] == '1':
+                        add_spell_base(name)            
+                    else:
+                        update_spell_base(name)
+                        cur = g.db.execute('select * from spells where name_hero like ? and pos = ?', [name, request.form['pos_skill']])
+                        entries = [dict(id_spell=row[0],
+                                        pos=row[7]) for row in cur.fetchall()]
+                        post_spell_lvl1(entries)
+                        post_spell_lvl2(entries)
+                        post_spell_lvl3(entries)
+                        post_spell_lvl4(entries)
+                        g.db.close()
+                        return redirect(url_for('hero', name=name))
+                else:
+                    g.db = connect_db(app.config['USER_DB'])
+                    searchword = request.args.get('pos', '')
+                    if searchword != '':
+                        pos = int(searchword)
+                    else:
+                        pos = 1
+                        cur = g.db.execute('select * from spells where name_hero like ? and pos = ? order by pos asc', [name, pos])
+                        entries = [dict(id_spell=row[0], name_hero=row[1],
+                                        nam=row[2], des=row[3],
+                                        abi_type=row[4],
+                                        tar_type=row[5], allo_tar=row[6],
+                                        pos=row[7]) for row in cur.fetchall()]
+                        spell1 = recup_spell(1, entries)
+                        spell2 = recup_spell(2, entries)
+                        spell3 = recup_spell(3, entries)
+                        spell4 = recup_spell(4, entries)
+                        g.db.close()
+                        return render_template('post_spell.html', name=name,
+                                               entries=entries,
+                                               len_entries=len(entries),
+                                               pos=pos, spell1=spell1,
+                                               len_spell1=len(spell1),
+                                               spell2=spell2,
+                                               len_spell2=len(spell2),
+                                               spell3=spell3,
+                                               len_spell3=len(spell3),
+                                               spell4=spell4,
+                                               len_spell4=len(spell4))
+    return redirect(url_for('default'))

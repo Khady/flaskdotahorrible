@@ -14,6 +14,7 @@ create table items (
 	 ms integer,
 	 life integer,
 	 mana integer,
+	 damages integer,
 	 reg_life integer,
 	 reg_mana integer,
 	 orb varchar,

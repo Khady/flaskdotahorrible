@@ -12,14 +12,18 @@
     </div>
     
     <div id="menu">
-      
+      <a href="{{ url_for('default') }}">Accueil</a> | 
+      <a href="">Guides</a> | 
+      <a href="{{ url_for('hero') }}">Heros</a> | 
+      <a href="{{ url_for('item') }}">Items</a>
     </div>
     
     <div id="connection">
       {% if not session.logged_in %}
-      <a href="{{ url_for('login') }}">log in</a>
+      <a href="{{ url_for('login') }}">Connectez-vous</a>
+      <a href="{{ url_for('add_user') }}">Inscription</a>
       {% else %}
-      <a href="{{ url_for('logout') }}">log out</a>
+      <a href="{{ url_for('logout') }}">Deconnection</a>
       {% endif %}
     </div> 
     

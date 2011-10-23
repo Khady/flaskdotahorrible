@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 #-*- encoding: utf-8 -*-
+
 from __future__ import with_statement
 import sqlite3
 import time
@@ -28,7 +29,7 @@ def valid_user(code_val):
         g.db.execute('update user_description set valid = 1 where id == ?', [entries[0]['user_id']])
         g.db.execute('delete from user_validation where id == ?',  [entries[0]['user_id']])
         g.db.commit()
-        flash('account activated')
+        flash("Compte vient d'etre activer")
         return redirect(url_for('default'))
     else:
         flash("code d'activation invalide")
@@ -67,12 +68,12 @@ def add_user():
         users = g.db.execute("select 'login', 'mail' from user_description")
         entries = [dict(login=row[0], mail=row[1]) for row in users.fetchall()]
         for elem in entries:
-            error = ""        
+            error = ''
             if login.lower() == elem['login'].lower():
-                error = 'login already exist '
+                error = 'Identifiant deja existant'
                 break
             elif mail == elem['mail'].lower():
-                error += 'mail already exist'
+                error += 'Adresse mail deja existant'
                 break
             else:
                 error = None
@@ -99,12 +100,15 @@ def add_user():
         print    ("Voici votre url d'activation\nhttp://dota2-arena.com%s\n" % url_for('activate', code_val = code_val))
 
         g.db.close()
-        flash('Welcome to Dota 2 Arena')
+        flash('Bienvenue sur Dota 2 Arena !')
         return redirect(url_for('login'))
     return render_template('sign_up.html', error=error)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if 'logged_in' in session:
+        flash('Vous etes deja connecte')
+        return redirect(url_for('default'))
     error = None
     if request.method == 'POST':
         g.db = connect_db(app.config['USER_DB'])
@@ -122,12 +126,12 @@ def login():
                 session['logged_in'] = True
                 session['user_login'] = elem['login']
                 session['user_id'] = elem['user']
-                flash('You were logged in')
+                flash('Vous etes maintenant connecte')
                 g.db.close()
                 return redirect(url_for('default'))
     
         # probleme dans l'identification
-        error="invalid login or password"
+        error="Identifiant ou mot de passe invalide"
 
     return render_template('login.html', error=error)
 
@@ -135,5 +139,5 @@ def login():
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     session.pop('logged_in', None)
-    flash('You were logged out')
+    flash('Vous venez de vous deconnecter')
     return redirect(url_for('default'))
