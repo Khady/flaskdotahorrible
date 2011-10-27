@@ -65,18 +65,20 @@ def add_user():
         date = time.strftime('%Y-%m-%d',time.localtime())
 
         # verifie la validite des informations
-        users = g.db.execute("select 'login', 'mail' from user_description")
+        users = g.db.execute("select login, mail from user_description")
         entries = [dict(login=row[0], mail=row[1]) for row in users.fetchall()]
         for elem in entries:
             error = ''
             if login.lower() == elem['login'].lower():
-                error = 'Identifiant deja existant'
+                error = ' Identifiant deja existant '
                 break
             elif mail == elem['mail'].lower():
-                error += 'Adresse mail deja existant'
+                error += 'Adresse mail deja existant '
                 break
             else:
                 error = None
+        if password == "":
+            error = 'Password incorrect'
 
         if error != None:
             return render_template('sign_up.html', error=error)
