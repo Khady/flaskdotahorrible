@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+
+  {% if id == None %}
+  <h2>Guides disponibles</h2>
+  <p>
+    {% for guide in guides %}
+    <a href="{{ url_for('groupe', id=guide[0]) }}">{{guide[1]}}</a><br />
+    {% endfor %}
+  </p>
+  {% else %}
+  <h2>{{ content['title'] }}</h2>
+  <p>
+    Auteur : {{ content['auteur'] }}<br />
+    hero : {{ content['hero'] }}<br />
+    difficulté : {{ content['difficulte'] }}<br />
+    tag : {{ content['tag'] }}
+  </p>
+  <p>
+    {{ content['body'] }}
+  </p>
+  {% endif %}
+{% endblock %}

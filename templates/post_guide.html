@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block body %}
+{% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+
+<h2>Créer un guide</h2>
+<form action="{{ url_for('post_guide') }}" method=post>
+<p>
+  <label for="hero">Hero</label><br />
+  <select name="hero" id="hero">
+    {% for i in range(1) %}
+    <option value="{{ hero[i]['id'] }}">{{ hero[i]['nom'] }}</option>
+    {% endfor %}
+  </select>
+</p>
+<p>
+  <dl>
+    <dt>Nom du guide :</dt>
+    <dd><input type="text" name="nom"> </dd>
+    <dt>Tag :</dt>
+    <dd><input type="text" name="tag"></dd>
+    <dt>Difficulté :</dt>
+    <dd>
+      <input type="radio" name="difficulte" value="Facile">Facile
+      <input type="radio" name="difficulte" value="Moyen">Moyen
+      <input type="radio" name="difficulte" value="Difficile">Difficile
+    </dd>
+    <dt>Contenu :</dt>
+    <dd><textarea name="content" id="content" rows="40" cols="100"></textarea></dd>
+  </dl>
+</p>
+<input type=submit value="Valider">
+</form>
+
+{% endblock %}
