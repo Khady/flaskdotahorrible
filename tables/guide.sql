@@ -6,10 +6,9 @@ create table guide (
   title varchar not null,
   tag varchar,
   difficulties varchar not null,
-  spells varchar not null,
-  skill1 varchar not null,
-  skill2 varchar not null,
-  skill3 varchar not null,
-  skill4 varchar not null,
-  content varchar not null
+  content_untouch varchar not null,
+  content_markup varchar not null,
+  date_create date not null,
+  date_last_modif date not null,
+  score integer
 );

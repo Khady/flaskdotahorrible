@@ -3,32 +3,48 @@
 {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 
 <h2>Créer un guide</h2>
+
+{% if previsualisation %}
+<h3>{{ titre }}</h3>
+{{ tag }}<br />
+{{ guide }}<br />
+{% endif %}
+
+{% if id_guide %}
+<form action="{{ url_for('post_guide', id_guide=id_guide) }}" method=post>
+{% else %}
 <form action="{{ url_for('post_guide') }}" method=post>
+{% endif %}
 <p>
-  <label for="hero">Hero</label><br />
+  <label for="hero">Pour quel hero voulez vous faire un guide ?</label><br />
   <select name="hero" id="hero">
-    {% for i in range(1) %}
-    <option value="{{ hero[i]['id'] }}">{{ hero[i]['nom'] }}</option>
+    {% for i in range(herolen) %}
+    <option value="{{ hero[i]['id'] }}"
+	    {% if i == hid %}selected{% endif %}>{{ hero[i]['nom'] }}</option>
     {% endfor %}
   </select>
 </p>
 <p>
   <dl>
-    <dt>Nom du guide :</dt>
-    <dd><input type="text" name="nom"> </dd>
+    <dt>Titre du guide :</dt>
+    <dd><input type="text" name="titre"
+	       {% if titre %} value="{{ titre }}" {% endif %}> </dd>
     <dt>Tag :</dt>
-    <dd><input type="text" name="tag"></dd>
+    <dd><input type="text" name="tag"
+	       {% if tag %} value="{{ tag }}" {% endif %}></dd>
     <dt>Difficulté :</dt>
     <dd>
-      <input type="radio" name="difficulte" value="Facile">Facile
-      <input type="radio" name="difficulte" value="Moyen">Moyen
-      <input type="radio" name="difficulte" value="Difficile">Difficile
+      <input type="radio" name="difficulte" value="Facile"
+	     {% if diff == "Facile" %} checked="checked" {% endif %}>Facile
+      <input type="radio" name="difficulte" value="Moyen"
+	     {% if diff == "Moyen" %} checked="checked" {% endif %}>Moyen
+      <input type="radio" name="difficulte" value="Difficile"
+	     {% if diff == "Difficile" %} checked="checked" {% endif %}>Difficile
     </dd>
     <dt>Contenu :</dt>
-    <dd><textarea name="content" id="content" rows="40" cols="100"></textarea></dd>
+    <dd><textarea name="content" id="content" rows="40" cols="100">{% if content %}{{ content }}{% endif %}</textarea></dd>
   </dl>
+<input type="submit" name="mode_post" value="Previsualisation"><input type="submit" name="mode_post" value="Validation">
 </p>
-<input type=submit value="Valider">
 </form>
-
 {% endblock %}
