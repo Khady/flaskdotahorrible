@@ -108,18 +108,22 @@ def parse_balise(content):
     return content
 
 
-def valid_guide():
-    if (len(request.form['titre']) == 0 or
-        len(request.form['content']) == 0 or
-        len(request.form['difficulte']) == 0):
-        error = "Element manquant"
+def valid_guide(heros):
+    error = None
+    if len(request.form['titre']) == 0:
+        error = "Pas de titre"
+    elif len(request.form['content']) == 0:
+        error = "Pas de contenu"
+    elif len(request.form['difficulte']) == 0:
+        error = "Pas de difficulte"
+    if error != None:
         hid = request.form['hero']
         titre=request.form['titre']
         content=request.form['content']
         tag=request.form['tag']
         diff = request.form['difficulte']
-        return render_template('post_guide.html',
-                               hero=heros, herolen=herolen, hid=hid, # heros liste
+        return render_template('post_guide.html', error=error,
+                               hero=heros, herolen=len(heros), hid=hid, # heros liste
                                titre=titre, tag=tag, content=content, diff=diff)
     else:
         return True
@@ -180,7 +184,9 @@ def post_guide(id_guide=None):
                                            hero=heros, herolen=herolen, hid=hid,# heros liste
                                            titre=titre, tag=tag, content=content, diff=diff)
                 else:
-                    valid_guide()
+                    val = valid_guide(heros)
+                    if val != True:
+                        return val
                     if (id_guide == None):
                         id_guide = add_guide()
                     else:
