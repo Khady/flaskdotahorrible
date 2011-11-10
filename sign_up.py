@@ -73,7 +73,7 @@ def add_user():
                 error = ' Identifiant deja existant '
                 break
             elif mail == elem['mail'].lower():
-                error += 'Adresse mail deja existant '
+                error += 'Adresse mail deja existante '
                 break
             else:
                 error = None
@@ -95,6 +95,9 @@ def add_user():
         entries = [dict(user_id=row[0]) for row in cur.fetchall()]
         g.db.execute("insert into user_validation ('id', 'code_val') values (?, ?)",
                      [entries[0]['user_id'], code_val])
+        g.db.commit()
+        # On met l'utilisateur dans le groupe 'user' lors de son inscription
+        g.db.execute("insert into user_group ('id', 'id_user', 'gadm') values (?, ?, ?)", [2, entries[0]['user_id'], 0])
         g.db.commit()
         # on donne le code a l'utilisateur
         #Mail.send(mail, "Validation compte Dota 2 Arena",
@@ -131,7 +134,7 @@ def login():
                 flash('Vous etes maintenant connecte')
                 g.db.close()
                 return redirect(url_for('default'))
-    
+
         # probleme dans l'identification
         error="Identifiant ou mot de passe invalide"
 

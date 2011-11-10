@@ -16,9 +16,9 @@ def guide(id=None):
     guides=None
     content=None
     if id == None:
-        cur = g.db.execute('select id, title, hero from guide')
-        guides = [dict(id=row[0], titre=row[1], hero=row[2]) for row in cur.fetchall()]
+        cur = g.db.execute('select id, title, hero, heroname, score from guide where valid = ?', [1])
+        guides = [dict(id=row[0], titre=row[1], hero=row[2], heroname=row[3], score=row[4]) for row in cur.fetchall()]
     else:
-        cur = g.db.execute('select title, hero, tag, difficulties, content_markup, autor from guide where id = %i' % id)
-        content = [dict(titre=row[0], hero=row[1], tag=row[2], difficulte=row[3], body=Markup(parse_balise(row[4])), auteur=row[5])for row in cur.fetchall()][0]
+        cur = g.db.execute('select title, hero, heroname, tag, difficulties, content_markup, autor, score from guide where id = %i' % id)
+        content = [dict(titre=row[0], hero=row[1], heroname=row[2], tag=row[3], difficulte=row[4], body=Markup(parse_balise(row[5])), auteur=row[6], score=row[7])for row in cur.fetchall()][0]
     return render_template('guide.html', error=error, content=content, guides=guides, id=id)

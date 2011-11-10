@@ -1,77 +1,77 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h2>Gestion des groupes</h2>
-  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+<h2>Gestion des groupes</h2>
+{% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 
-  {% if admin or adm_groups %}
-  <h3>Créer un groupe</h3>
-  <form action="{{ url_for('create_groups') }}" method=post>
-    <dl>
-      <dt>Nom du groupe:</dt>
-      <dd><input type=text name=gname></dd>
-      <dt>Droits du groupe:</dt>
-      <dd><input type=checkbox name=news> Rediger des news</dd>
-      <dd><input type=checkbox name=guide> Rediger des guides</dd>
-      <dd><input type=checkbox name=groupe> Administrer les groupes</dd>
-      {% if admin %}<dd><input type=checkbox name=adm> Administrer le site</dd>{% endif %}
-      <dd><input type=submit value="Valider"></dd>
-    </dl>
-  </form>
-  {% endif %}
-  
-  {% if admin or adm_groups or gadmin %}
-  <h3>Modifier un groupe</h3>
-
-
-  <form action="{{ url_for('groups') }}" method=post>
-   <p>
-       <label for="group">Quel groupe voulez vous modifier ?</label><br />
-       <select name="group" id="group">
-	   {% for i in range(len) %}
-           <option value="{{ entries[i]['gid'] }}">{{ entries[i]['nom'] }}</option>
-	   {% endfor %}
-       </select>
-   </p>
-   <input type=submit value="Valider">
-  </form>
-
-  {% if gid %}
-  <h3>{{ gname }}</h3> 
-
-  <h4>Modifier le groupe {{ gname }}</h4>
-
-  <form action="{{ url_for('change_groups', gid=gid) }}" method=post>
-    <dl>
-      <dt>Nom du groupe:</dt>
-      <dd><input type=text name=gname value="{{ gname }}"></dd>
-      <dt>Droits du groupe:</dt>
-      <dd><input type=checkbox name=news 
-		 {% if news %}checked="checked"{% endif %}> Rediger des news</dd>
-      <dd><input type=checkbox name=guide 
-		 {% if guide %}checked="checked"{% endif %}> Rediger des guides</dd>
-      {% if adm_groups %}
-      <dd><input type=checkbox name=groupe 
-		 {% if groupe %}checked="checked"{% endif %}> Administrer les groupes</dd>
-      {% endif %}
-      {% if admin %}
-      <dd><input type=checkbox name=adm
-		 {% if adm %}checked="checked"{% endif %}> Administrer le site</dd>
-      {% endif %}
-      <dd><input type=submit value="Valider"></dd>
-    </dl>
-  </form>
-  
-  <h4>Ajouter un utilisateur</h4>
-  <form action="{{ url_for('add_user_groups', gid=gid) }}" method=post>
-    <dl>
-      <dt>Nom de l'utilisateur:</dt>
-      <dd><input type=text name=uname></dd>
-      <dd><input type=checkbox name=gadm> Administrer le groupe</dd>
-      <dd><input type=submit value="Valider"></dd>
-    </dl>
-  </form>
-  {% endif %}
-  
+{% if admin or adm_groups %}
+<h3>Créer un groupe</h3>
+<form action="{{ url_for('create_groups') }}" method=post>
+  <dl>
+    <dt>Nom du groupe:</dt>
+    <dd><input type=text name=gname></dd>
+    <dt>Droits du groupe:</dt>
+    <dd><input type=checkbox name=news> Rediger des news</dd>
+    <dd><input type=checkbox name=guide> Rediger des guides</dd>
+    <dd><input type=checkbox name=groupe> Administrer les groupes</dd>
+    {% if admin %}<dd><input type=checkbox name=adm> Administrer le site</dd>{% endif %}
+    <dd><input type=submit value="Valider"></dd>
+  </dl>
+</form>
 {% endif %}
+
+{% if admin or adm_groups or gadmin %}
+<h3>Modifier un groupe</h3>
+
+
+<form action="{{ url_for('groups') }}" method=post>
+ <p>
+     <label for="group">Quel groupe voulez vous modifier ?</label><br />
+     <select name="group" id="group">
+	   {% for i in range(len) %}
+         <option value="{{ entries[i]['gid'] }}">{{ entries[i]['nom'] }}</option>
+	   {% endfor %}
+     </select>
+ </p>
+ <input type=submit value="Valider">
+</form>
+
+{% if gid %}
+<h3>{{ gname }}</h3> 
+
+<h4>Modifier le groupe {{ gname }}</h4>
+
+<form action="{{ url_for('change_groups', gid=gid) }}" method=post>
+  <dl>
+    <dt>Nom du groupe:</dt>
+    <dd><input type=text name=gname value="{{ gname }}"></dd>
+    <dt>Droits du groupe:</dt>
+    <dd><input type=checkbox name=news 
+		 {% if news %}checked="checked"{% endif %}> Rediger des news</dd>
+    <dd><input type=checkbox name=guide 
+		 {% if guide %}checked="checked"{% endif %}> Rediger des guides</dd>
+    {% if adm_groups %}
+    <dd><input type=checkbox name=groupe 
+		 {% if groupe %}checked="checked"{% endif %}> Administrer les groupes</dd>
+    {% endif %}
+    {% if admin %}
+    <dd><input type=checkbox name=adm
+		 {% if adm %}checked="checked"{% endif %}> Administrer le site</dd>
+    {% endif %}
+    <dd><input type=submit value="Valider"></dd>
+  </dl>
+</form>
+
+<h4>Ajouter un utilisateur</h4>
+<form action="{{ url_for('add_user_groups', gid=gid) }}" method=post>
+  <dl>
+    <dt>Nom de l'utilisateur:</dt>
+    <dd><input type=text name=uname></dd>
+    <dd><input type=checkbox name=gadm> Administrer le groupe</dd>
+    <dd><input type=submit value="Valider"></dd>
+  </dl>
+</form>
+{% endif %}
+
+{% endif %}
+
 {% endblock %}
-  

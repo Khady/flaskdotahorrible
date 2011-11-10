@@ -6,16 +6,17 @@
   <h2>Guides disponibles</h2>
   <p>
     {% for guide in guides %}
-    <a href="{{ url_for('guide', id=guide['id']) }}">{{guide['hero']}} : {{guide['titre']}}</a><br />
+    <a href="{{ url_for('guide', id=guide['id']) }}">{{guide['heroname']}} : {{guide['titre']}}</a> (score : {{ guide['score'] }})<br />
     {% endfor %}
   </p>
   {% else %}
   <h2>{{ content['titre'] }}</h2>
   <p>
     Auteur : {{ content['auteur'] }}<br />
-    hero : {{ content['hero'] }}<br />
+    hero : {{ content['heroname'] }}<br />
     difficulté : {{ content['difficulte'] }}<br />
     tag : {{ content['tag'] }}
+    score : {{ content['score'] }}
   </p>
   <p>
     {{ content['body'] }}

@@ -5,6 +5,9 @@ import sqlite3
 from flask import g
 from dota2 import app
 
+def connect_db(base):
+    return sqlite3.connect(base)
+
 def check_droits(user_id, droit):
     cur = g.db.execute('select id_group from user_group where id_user == ?', [user_id])
     for row in cur.fetchall():
@@ -15,20 +18,24 @@ def check_droits(user_id, droit):
     return False
 
 def get_droits(uid):
-    droits = {'news': 0, 'guide': 0, 'adm': 0, 'groupe': 0}
+    droits = {'news': 0, 'guide': 0, 'guide_validation': 0, 'adm': 0, 'groupe': 0}
     cur = g.db.execute('select id_group from user_group where id_user == ?', [uid])
     groups = [row[0] for row in cur.fetchall()]
     for group in groups:
-        cur = g.db.execute('select news, guide, adm, groupe from groupe where id == ?', [group])
-        row = cur.fetchall()[0]
-        if row[0] == 1:
-            droits['news'] = 1
-        if row[1] == 1:
-            droits['guide'] = 1
-        if row[2] == 1:
-            droits['adm'] = 1
-        if row[3] == 1:
-            droits['groupe'] = 1
+        cur = g.db.execute('select news, guide, guide_validation, adm, groupe from groupe where id == ?', [group])
+        row = cur.fetchall()
+        if len(row) != 0:
+            row = row[0]
+            if row[0] == 1:
+                droits['news'] = 1
+            if row[1] == 1:
+                droits['guide'] = 1
+            if row[2] == 1:
+                droits['guide_validation'] = 1
+            if row[3] == 1:
+                droits['adm'] = 1
+            if row[4] == 1:
+                droits['groupe'] = 1
     return droits
 
 def create_group():

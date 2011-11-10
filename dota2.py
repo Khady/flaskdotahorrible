@@ -22,6 +22,7 @@ from guide import *
 from groups import *
 from item import *
 from news import *
+from admin import *
 
 @app.route('/', methods=['GET'])
 def default():

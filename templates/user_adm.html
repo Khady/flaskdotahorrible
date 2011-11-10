@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Panneau de configuration</h2>
+  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
+  <form action="{{ url_for('user_adm') }}" method=post>
+    <dl>
+      <dt>Changer de mot de passe:
+      <dd><input type=password name=password>
+      <dt>Changer d'adresse mail:
+      <dd><input type=text name=mail>
+      <dd><input type=submit value="Valider">
+      </dl>
+  </form>
+{% endblock %}

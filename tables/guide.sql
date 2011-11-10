@@ -2,6 +2,7 @@ drop table if exists guide;
 create table guide (
   id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE,
   hero integer not null,
+  heroname varchar not null,
   autor integer not null,
   title varchar not null,
   tag varchar,
@@ -10,5 +11,6 @@ create table guide (
   content_markup varchar not null,
   date_create date not null,
   date_last_modif date not null,
-  score integer
+  valid integer not null,
+  score integer no null
 );

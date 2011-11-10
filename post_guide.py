@@ -1,5 +1,6 @@
 import sqlite3
 import re
+import Mail
 from flask import render_template, g, url_for, redirect, request, Markup, session
 from markdown import markdown
 from dota2 import app
@@ -130,23 +131,28 @@ def valid_guide(heros):
 
 def add_guide():
     g.db = connect_db(app.config['USER_DB'])
-    g.db.execute('insert into guide (title, autor, tag, hero, difficulties, content_untouch, content_markup, date_create, date_last_modif) values (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    g.db.execute('insert into guide (title, autor, tag, hero, heroname, difficulties, content_untouch, content_markup, date_create, date_last_modif, valid, score) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                  [request.form['titre'],
                   session['user_login'],
                   request.form['tag'],
                   request.form['hero'],
+                  get_heroName(request.form['hero']),
                   request.form['difficulte'],
                   request.form['content'],
                   markdown(Markup.escape(request.form['content'])),
-                  datetime.today(), datetime.today()])
+                  datetime.today(), datetime.today(),
+                  0, 0])
     g.db.commit()
 
 
 def update_guide(id_guide):
     g.db = connect_db(app.config['USER_DB'])
-    g.db.execute('update guide set title = ?, tag = ?, content_untouch = ?, content_markup = ?, date_last_modif = ? where id = ?',
+    g.db.execute('update guide set title = ?, tag = ?, hero = ?, heroname = ?, difficulte = ?, content_untouch = ?, content_markup = ?, date_last_modif = ? where id = ?',
                  [request.form['titre'],
                   request.form['tag'],
+                  request.form['hero'],
+                  get_heroName(request.form['hero']),
+                  request.form['difficulte'],
                   request.form['content'],
                   parse_balise(markdown(Markup.escape(request.form['guide']))),
                   datetime.today(), id_guide])
@@ -157,8 +163,25 @@ def get_heros():
     g.db = connect_db(app.config['USER_DB'])
     cur = g.db.execute('select id, nam from hero')
     hero = [dict(id=row[0], nom=row[1]) for row in cur.fetchall()]
-    g.db.close()
     return hero
+
+def get_heroName(id_hero):
+    g.db = connect_db(app.config['USER_DB'])
+    cur = g.db.execute('select nam from hero where id = ?', [id_hero])
+    heroname = [row[0] for row in cur.fetchall()][0]
+    return heroname
+
+def mail_guide(id_guide):
+    g.db = connect_db(app.config['USER_DB'])
+    mail = ""
+    cur = g.db.execute('select id_user from user_group where id_group = ?', [1])
+    users = [row[0] for row in cur.fetchall()]
+    for user in users:
+        cur = g.db.execute('select mail from user_description where id = ?', [user])
+        mail = [row[0] for row in cur.fetchall()][0]
+        Mail.send(mail, "Nouveau guide",
+                  ("Un nouveau guide (ou une mise a jour d'un guide) est disponible.\n%s"
+                   % url_for('guide', id_guide = id_guide)))
 
 @app.route('/post_guide/', methods = ['GET', 'POST'])
 @app.route('/post_guide/<int:id_guide>', methods = ['GET', 'POST'])
@@ -187,6 +210,9 @@ def post_guide(id_guide=None):
                     val = valid_guide(heros)
                     if val != True:
                         return val
+                    print 'toto'
+                    print id_guide
+                    # mail_guide(id_guide)
                     if (id_guide == None):
                         id_guide = add_guide()
                     else:
