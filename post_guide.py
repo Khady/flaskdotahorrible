@@ -144,7 +144,6 @@ def add_guide():
                   0, 0])
     g.db.commit()
 
-
 def update_guide(id_guide):
     g.db = connect_db(app.config['USER_DB'])
     g.db.execute('update guide set title = ?, tag = ?, hero = ?, heroname = ?, difficulte = ?, content_untouch = ?, content_markup = ?, date_last_modif = ? where id = ?',
@@ -160,13 +159,13 @@ def update_guide(id_guide):
 
 
 def get_heros():
-    g.db = connect_db(app.config['USER_DB'])
+    #g.db = connect_db(app.config['USER_DB'])
     cur = g.db.execute('select id, nam from hero')
     hero = [dict(id=row[0], nom=row[1]) for row in cur.fetchall()]
     return hero
 
 def get_heroName(id_hero):
-    g.db = connect_db(app.config['USER_DB'])
+#    g.db = connect_db(app.config['USER_DB'])
     cur = g.db.execute('select nam from hero where id = ?', [id_hero])
     heroname = [row[0] for row in cur.fetchall()][0]
     return heroname
@@ -190,8 +189,8 @@ def post_guide(id_guide=None):
         uid = session['user_id']
         g.db = connect_db(app.config['USER_DB'])
         droits = get_droits(uid)
-        g.db.close()
         heros = get_heros()
+        g.db.close()
         herolen = len(heros)
         if droits['guide'] == 1:
             if (request.method == 'POST'):
