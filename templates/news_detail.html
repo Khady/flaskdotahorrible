@@ -5,4 +5,19 @@
   {{ entries["auteur"] }}
 </p>
 {{ entries["news"] }}
+<h2>Commentaire</h2>
+{% if logged == 1 %}
+  <form action="{{ url_for('post_comment', id_genre=entries['id_news'])}}" method=post>
+    <dl>
+      <dt><label for="comment">Contenu:</label>
+      <dd><textarea name="comment" id="comment" cols="100"></textarea>
+	<input type="hidden" name="genre" value="news">
+      <dd><input type="submit" name="mode_post" value="Validation"><input type="submit" name="mode_post" value="Avancer">
+    </dl>
+  </form>
+{% endif %}
+{% for com in commentaire %}
+{{ com["auteur"] }}
+{{ com["comment"] }}
+{% endfor %}
 {% endblock %}

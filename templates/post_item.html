@@ -2,7 +2,7 @@
 {% block body %}
 <h2>Creation d'un objet</h2>
   {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-  <form action="{{ url_for('post_hero') }}" method=post>
+  <form action="{{ url_for('post_item') }}" method=post>
     <dl>
       <dt>Nom du l'objet:
       <dd><input type=text {% if entries %} value="{{ entries[0]['nam'] }}" {% endif %} name="nam">

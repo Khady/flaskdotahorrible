@@ -18,6 +18,7 @@ from post_spell import *
 from post_news import *
 from post_item import *
 from post_guide import *
+from post_comment import *
 from guide import *
 from groups import *
 from item import *

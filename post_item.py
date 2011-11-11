@@ -8,7 +8,7 @@ def connect_db(base):
 
 @app.route('/post_item/', methods=['GET', 'POST'])
 @app.route('/post_item/<name>', methods=['GET', 'POST'])
-def post_hero(name=None):
+def post_item(name=None):
     if 'logged_in' in session:
         uid = session['user_id']
         g.db = connect_db(app.config['USER_DB'])

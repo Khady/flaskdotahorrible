@@ -10,7 +10,7 @@
 	   {% for i in range(len) %}
            <option value="{{ entries[i]['name'] }}">{{ entries[i]['name'] }}</option>
 	   {% endfor %}
-       </select>
+       </select><br />
        <label for="spell">Quel hero voulez vous modifier les sorts?</label><br />
        <select name="spell" id="spell">
            <option value="1">Skill 1</option>
@@ -35,7 +35,7 @@
      <label for="allo_tar_skill">Type de cible autorise du Skill: </label><br />
      <input type=text {% if len_entries %} value="{{ entries[0]['allo_tar'] }}" {% endif %} name="allo_tar_skill"> <br/>
      <label for="pos_skill">Position du Skill: </label><br />
-     <input type=text {% if len_entries %} value="{{ entries[0]['pos'] }}" {% endif %} name="pos_skill">
+     <input type=text {% if pos %} value="{{ pos }}" {% endif %} name="pos_skill">
      <input type=hidden {% if len_entries %} value="0" {% else %} value="1" {% endif %} name="modif">
      
      <table>
@@ -92,9 +92,5 @@
    <input type=hidden {% if len_spell4 %} value="0" {% else %} value="1" {% endif %} name="modif_lvl4">
    <input type=submit value="Validation">
   </form>
-  {{ len_spell1 }}
-  {{ len_spell2 }}
-  {{ len_spell3 }}
-  {{ len_spell4 }}
 {% endif %}
 {% endblock %}

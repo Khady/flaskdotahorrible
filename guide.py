@@ -1,6 +1,6 @@
 import sqlite3
 import re
-from flask import render_template, g, url_for, redirect, Markup
+from flask import render_template, g, url_for, redirect, Markup, session
 from markdown import markdown
 from post_guide import parse_balise
 from dota2 import app
@@ -21,4 +21,15 @@ def guide(id=None):
     else:
         cur = g.db.execute('select title, hero, heroname, tag, difficulties, content_markup, autor, score from guide where id = %i' % id)
         content = [dict(titre=row[0], hero=row[1], heroname=row[2], tag=row[3], difficulte=row[4], body=Markup(parse_balise(row[5])), auteur=row[6], score=row[7])for row in cur.fetchall()][0]
+        cur = g.db.execute("select * from commentaire where id_genre = ? an\
+d genre like 'news'",
+                               [id])
+        commentaire = [dict(id=row[0],  auteur=row[3],
+                            comment=Markup(row[5]))
+                       for row in cur.fetchall()]
+        if 'logged_in' in session:
+            logged = 1
+        else:
+            logged = 0
+        return render_template('guide.html', error=error, content=content, guides=guides, id=id, commentaire=commentaire, logged=logged)
     return render_template('guide.html', error=error, content=content, guides=guides, id=id)
