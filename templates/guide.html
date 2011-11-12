@@ -21,7 +21,7 @@
   <p>
     {{ content['body'] }}
   </p>
-  <h2>Commentaire</h2>
+  <h2>Commentaires</h2>
   {% if logged == 1 %}
   <form action="{{ url_for('post_comment', id_genre=id)}}" method=post>
     <dl>

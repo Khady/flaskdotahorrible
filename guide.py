@@ -27,7 +27,7 @@ def guide(id=None):
             logged = 0
             droits = 0
         cur = g.db.execute('select title, hero, heroname, tag, difficulties, content_markup, autor, score, valid from guide where id = %i' % id)
-        content = [dict(titre=row[0], hero=row[1], heroname=row[2], tag=row[3], difficulte=row[4], body=Markup(parse_balise(row[5])), auteur=row[6], score=row[7], valid=row[8])for row in cur.fetchall()]
+        content = [dict(titre=row[0], hero=row[1], heroname=row[2], tag=row[3], difficulte=row[4], body=Markup(parse_balise(row[5], row[2])), auteur=row[6], score=row[7], valid=row[8])for row in cur.fetchall()]
         if len(content) == 0:
             flash("Guide inexistant")
             return redirect(url_for('guide'))
@@ -35,7 +35,7 @@ def guide(id=None):
         if content['valid'] == 0 and droits == 0:
             flash("Guide inexistant")
             return redirect(url_for('guide'))
-        cur = g.db.execute("select * from commentaire where id_genre = ? and genre like 'news'", [id])
+        cur = g.db.execute("select * from commentaire where id_genre = ? and genre like 'guide'", [id])
         commentaire = [dict(id=row[0],  auteur=row[3],
                             comment=Markup(row[5]))
                        for row in cur.fetchall()]
