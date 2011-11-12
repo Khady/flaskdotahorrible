@@ -34,12 +34,18 @@
 	       {% if tag %} value="{{ tag }}" {% endif %}></dd>
     <dt>Difficulté :</dt>
     <dd>
+      {% if diff %}
       <input type="radio" name="difficulte" value="Facile"
 	     {% if diff == "Facile" %} checked="checked" {% endif %}>Facile
       <input type="radio" name="difficulte" value="Moyen"
 	     {% if diff == "Moyen" %} checked="checked" {% endif %}>Moyen
       <input type="radio" name="difficulte" value="Difficile"
 	     {% if diff == "Difficile" %} checked="checked" {% endif %}>Difficile
+      {% else %}
+      <input type="radio" name="difficulte" value="Facile">Facile
+      <input type="radio" name="difficulte" value="Moyen" checked="checked">Moyen
+      <input type="radio" name="difficulte" value="Difficile">Difficile
+      {% endif %}
     </dd>
     <dt>Contenu :</dt>
     <dd><textarea name="content" id="content" rows="40" cols="100">{% if content %}{{ content }}{% endif %}</textarea></dd>

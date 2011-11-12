@@ -42,12 +42,15 @@ def guide_validation():
     g.db = connect_db(app.config['USER_DB'])
     cur = g.db.execute('select id, title, hero, heroname, score, valid from guide')
     guides = [dict(id=row[0], titre=row[1], hero=row[2], heroname=row[3], score=row[4], valid=row[5]) for row in cur.fetchall()]
+    print guides
     if request.method == 'GET':
+        g.db.close()
         return render_template('guides_adm.html', guides=guides)
     else:
         for guide in guides:
-            guide['valid'] = int(request.form[guide['hero']])
+            guide['valid'] = int(request.form[guide['heroname']])
             g.db.execute('update guide set valid = ? where id = ?', [guide['valid'], guide['id']])
             g.db.commit()
         flash("Modifications enregistrees")
+        g.db.close()
         return render_template('guides_adm.html', guides=guides)

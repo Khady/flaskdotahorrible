@@ -5,9 +5,9 @@
   <form action="{{ url_for('guide_validation') }}" method=post>
     {% for guide in guides %}
     <a href="{{ url_for('guide', id=guide['id']) }}">{{guide['heroname']}} : {{guide['titre']}}</a> (score : {{ guide['score'] }})<br />
-    <input type="radio" name="{{ guide['hero'] }}" value="0"
+    <input type="radio" name="{{guide['heroname']}}" value="0"
 	   {% if guide['valid'] == 0 %} checked="checked" {% endif %}>Hors ligne
-    <input type="radio" name="{{ guide['hero'] }}" value="1"
+    <input type="radio" name="{{guide['heroname']}}" value="1"
 	   {% if guide['valid'] == 1 %} checked="checked" {% endif %}>En ligne
     <br />
     {% endfor %}
