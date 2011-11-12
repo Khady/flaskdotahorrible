@@ -10,11 +10,13 @@ from datetime import datetime
 def connect_db(base):
     return sqlite3.connect(base)
 
-def parse_tbl(content):
+def parse_tbl(content, heroname):
     g.db = connect_db(app.config['USER_DB'])
     tbl = re.compile(r'\[lvl=[1-5,]*\]')
     tableaux = tbl.findall(content)
     contenttmp = tbl.split(content)
+    cur = g.db.execute('select nam from spells where name_hero = ? order by pos', [heroname])
+    spells = [row[0] for row in cur.fetchall()]
     i = 0
     guide = ""
     for tab in tableaux:
@@ -23,7 +25,8 @@ def parse_tbl(content):
         guide += "<table border><caption>Sorts</caption>"
         tab = re.findall(r'[1-5]', tab)
         for ligne in range(5):
-            guide += "<tr><td>sort %i</td>" % (ligne + 1)
+            # guide += "<tr><td>sort %i</td>" % (ligne + 1)
+            guide += "<tr><td>%s</td>" % (spells[i])
             for lvl in range(len(tab)):
                 guide += "<td>"
                 if ligne + 1 == int(tab[lvl]):
@@ -101,8 +104,8 @@ def parse_item(content):
     guide += contenttmp[i]
     return guide
 
-def parse_balise(content):
-    content = parse_tbl(content)
+def parse_balise(content, heroname):
+    content = parse_tbl(content, heroname)
     content = parse_item(content)
     content = parse_hero(content)
     content = parse_spell(content)
@@ -153,7 +156,7 @@ def update_guide(id_guide):
                   get_heroName(request.form['hero']),
                   request.form['difficulte'],
                   request.form['content'],
-                  parse_balise(markdown(Markup.escape(request.form['guide']))),
+                  parse_balise(markdown(Markup.escape(request.form['guide'])), get_heroName(request.form['hero'])),
                   datetime.today(), id_guide])
     g.db.commit()
 
@@ -202,7 +205,7 @@ def post_guide(id_guide=None):
                     tag=request.form['tag']
                     diff = request.form['difficulte']
                     return render_template('post_guide.html',
-                                           previsualisation=1, guide=Markup(parse_balise(markdown(guide))), # previsualisation
+                                           previsualisation=1, guide=Markup(parse_balise(markdown(guide)), get_heroName(request.form['hero'])), # previsualisation
                                            hero=heros, herolen=herolen, hid=hid,# heros liste
                                            titre=titre, tag=tag, content=content, diff=diff)
                 else:

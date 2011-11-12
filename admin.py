@@ -22,12 +22,14 @@ def admin():
     if 'logged_in' in session:
         droits = get_droits(session['user_id'])
     else:
-        droits = {'groupe':0, 'guide_validation':0}
+        return redirect(url_for('default'))
     g.db.close()
     return render_template('admin.html', droits=droits)
 
 @app.route('/admin/user', methods=['GET', 'POST'])
 def user_adm():
+    if 'logged_in' not in session:
+        return redirect(url_for('default'))
     if request.method == 'GET':
         return render_template('user_adm.html')
     else:
