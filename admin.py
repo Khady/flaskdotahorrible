@@ -19,7 +19,11 @@ def connect_db(base):
 @app.route('/admin')
 def admin():
     g.db = connect_db(app.config['USER_DB'])
-    droits = get_droits(session['user_id'])
+    if 'logged_in' in session:
+        droits = get_droits(session['user_id'])
+    else:
+        droits = {'groupe':0, 'guide_validation':0}
+    g.db.close()
     return render_template('admin.html', droits=droits)
 
 @app.route('/admin/user', methods=['GET', 'POST'])
