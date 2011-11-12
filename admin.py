@@ -44,6 +44,8 @@ def user_adm():
 @app.route('/admin/guides', methods=['GET', 'POST'])
 def guide_validation():
     g.db = connect_db(app.config['USER_DB'])
+    if 'logged_in' not in session or get_droits(session['user_id'])['guide_validation'] != 1:
+        return redirect(url_for('default'))
     cur = g.db.execute('select id, title, hero, heroname, score, valid from guide')
     guides = [dict(id=row[0], titre=row[1], hero=row[2], heroname=row[3], score=row[4], valid=row[5]) for row in cur.fetchall()]
     print guides
