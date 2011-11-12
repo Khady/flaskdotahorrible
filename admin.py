@@ -48,6 +48,7 @@ def guide_validation():
         return render_template('guides_adm.html', guides=guides)
     else:
         for guide in guides:
+            print guide['heroname']
             guide['valid'] = int(request.form[guide['heroname']])
             g.db.execute('update guide set valid = ? where id = ?', [guide['valid'], guide['id']])
             g.db.commit()
