@@ -53,7 +53,7 @@ def parse_hero(content):
         cur = g.db.execute('select * from hero where nam like ?', [hroname])
         hroinfos = [dict(name=row[1]) for row in cur.fetchall()]
         if len(hroinfos) != 0:
-            guide += hroname
+            guide += '<a href="%s">%s</a>' % (url_for('hero', name = hroname), hroname)
         else:
             guide += "erreur : %s" % hro
     guide += contenttmp[i]
@@ -160,7 +160,6 @@ def update_guide(id_guide):
                   datetime.today(), id_guide])
     g.db.commit()
 
-
 def get_heros():
     #g.db = connect_db(app.config['USER_DB'])
     cur = g.db.execute('select id, nam from hero')
@@ -168,7 +167,7 @@ def get_heros():
     return hero
 
 def get_heroName(id_hero):
-#    g.db = connect_db(app.config['USER_DB'])
+    g.db = connect_db(app.config['USER_DB'])
     cur = g.db.execute('select nam from hero where id = ?', [id_hero])
     heroname = [row[0] for row in cur.fetchall()][0]
     return heroname
@@ -205,7 +204,9 @@ def post_guide(id_guide=None):
                     tag=request.form['tag']
                     diff = request.form['difficulte']
                     return render_template('post_guide.html',
-                                           previsualisation=1, guide=Markup(parse_balise(markdown(guide)), get_heroName(request.form['hero'])), # previsualisation
+                                           previsualisation=1,
+                                           guide=Markup(parse_balise(markdown(guide),
+                                                                     get_heroName(request.form['hero']))),
                                            hero=heros, herolen=herolen, hid=hid,# heros liste
                                            titre=titre, tag=tag, content=content, diff=diff)
                 else:
