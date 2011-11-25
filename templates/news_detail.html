@@ -12,9 +12,11 @@
       <dt><label for="comment">Contenu:</label>
       <dd><textarea name="comment" id="comment" cols="100"></textarea>
 	<input type="hidden" name="genre" value="news">
-      <dd><input type="submit" name="mode_post" value="Validation"><input type="submit" name="mode_post" value="Avancer">
+      <dd><input type="submit" name="mode_post" value="Validation"><input type="submit" name="mode_post" value="Avancé">
     </dl>
   </form>
+{% else %}
+        <p>Connectez-vous pour ajouter un commentaire.</p><br/>
 {% endif %}
 {% for com in commentaire %}
 {{ com["auteur"] }}

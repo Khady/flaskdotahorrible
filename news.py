@@ -37,7 +37,12 @@ def news(id_news=None, page=None):
             page = 1;
         g.db = connect_db(app.config['USER_DB'])
         cur = g.db.execute('select * from news limit ?, 10',[(page * 10) - 10])
-        entries = [dict(titre=row[1], auteur=row[2],
-                        tag=row[3],
-                        news=Markup(row[5])) for row in cur.fetchall()]
+        entries = []
+        for row in cur.fetchall():
+            dic = {'id': row[0], 'titre': row[1], 'auteur': row[2],
+                   'tag': row[3], 'news': Markup(row[5])}
+            tmp = g.db.execute("SELECT Count(*) FROM commentaire where genre like 'news' and id_genre = ?", '1');
+            commentaire = [dict(nb=row[0]) for row in tmp.fetchall()]
+            dic['nb_com'] = commentaire[0]['nb']
+            entries.append(dic)
         return render_template('news.html', entries=entries)
