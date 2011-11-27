@@ -1,0 +1,171 @@
+/*   Général   */
+body {
+    margin:0;
+    padding:0;
+    background-color:#170202;
+    /*background-image:url('http://media.steampowered.com/apps/dota2/images/international/main_bg.jpg');
+    background-position:center;
+    background-repeat: repeat-y;*/
+    color:#939393;
+}
+
+/*body {
+    color:grey;
+    background-color:#160203;
+    background-image:url(images/design/top_bg.jpg);
+    background-repeat:no-repeat;
+    background-position: top center;}
+*/
+h3 {
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;}
+
+
+/*    Haut    */
+#menu {
+    width: 1040px;
+    height: 56px;
+    padding-top: 10px;
+    position: relative;}
+
+#top {
+    width: 1040px;}
+
+#wait {
+    text-align: center;
+    color: grey;}
+
+#background {
+    background-image:url(http://media.steampowered.com/apps/dota2/images/international/main_bg.jpg);
+    background-repeat: repeat-y;
+    background-position: center;}
+
+
+/*    Menu     */
+
+#menu-accueil{
+    float: left; 
+    width: 80px;
+    height: 50px;
+    padding-top: 20px;
+    padding-left: 50px;
+    color:#E03206; 
+    text-decoration: none;
+    font-family: "Geneva";
+    font-size: 1.20em;}
+
+#menu-accueil a{
+    color:#E03206;
+    text-decoration: none;}
+
+#menu-hero{
+    float: left;
+    width: 80px;
+    height:50px;
+    padding-top: 20px;
+    padding-left: 50px;
+    color:#E03206;
+    text-decoration: none;
+    font-family: "Geneva";
+    font-size: 1.20em;}
+
+#menu-hero a{
+    color:#E03206;
+    text-decoration: none;}
+
+#menu-guide {
+    float: left;
+    width: 80px;
+    height:50px;
+    padding-top: 20px;
+    padding-left: 50px;
+    color:#E03206;
+    text-decoration: none;
+    font-family: "Geneva";
+    font-size: 1.20em;}
+
+#menu-guide a{
+    color:#E03206;
+    text-decoration: none;}
+
+#menu-item {
+    float: left;
+    width: 80px;
+    height:50px;
+    padding-top: 20px;
+    padding-left: 50px;
+    color:#E03206;
+    text-decoration: none;
+    font-family: "Geneva";
+    font-size: 1.20em;}
+
+#menu-item a{
+    color:#E03206;
+    text-decoration: none;}
+
+#menu-contact {
+    float: left;
+    width: 80px;
+    height:50px;
+    padding-top: 10px;
+    padding-left: 50px;
+    color:#E03206;
+    text-decoration: none;
+    font-family: "Geneva";
+    font-size: 1.20em;}
+
+#menu-contact a{
+    color:#E03206;
+    text-decoration: none;}
+
+#fond {
+    padding-top: 240px;
+    margin: auto;
+    background-image:url(images/design/top_bg.jpg);
+    background-repeat:no-repeat;
+    background-position: top center;
+}
+
+#contenu {
+    color:grey;
+    background-color:#160203;
+    background-image:url('http://media.steampowered.com/apps/dota2/images/international/main_bg.jpg');
+    background-position:center;
+    background-repeat: repeat-y;
+    width: 1080px;
+    margin: auto;
+/*padding-bottom: 40px;*/}
+
+#fond-live{
+    width: 960px;
+    background-image: url(http://media.steampowered.com/apps/dota2/images/international/match_center_top.jpg);
+    background-repeat: no-repeat;
+    background-position: top center;
+    min-height: 619px;
+    position:relative;
+    margin:auto;}
+
+#corps {
+    padding-top: 30px;
+    padding-left: 40px;
+    padding-right: 40px;
+    /*margin:auto;*/}
+
+/*   Footer    */
+#footer {
+    padding-top: 50px;
+    background-image: url(http://media.steampowered.com/apps/dota2/images/international/bottom_bg.jpg);
+    background-position: top center;
+    background-repeat: no-repeat;
+    margin: auto;
+    width: 1080px;
+    height: 180px;
+    bottom: 0;
+    margin-left: auto;
+    margin-right: auto;}
+
+#footer-img {
+    text-align: center;
+    padding-top: 100px;}
