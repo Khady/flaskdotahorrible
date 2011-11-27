@@ -36,6 +36,12 @@ def news(id_news=None, page=None):
         if (page==None):
             page = 1;
         g.db = connect_db(app.config['USER_DB'])
+        cur = g.db.execute('select Count(*) from news')
+        count_page = [dict(nb=row[0]) for row in cur.fetchall()]
+        pagemax = count_page[0]['nb'] / 10 + 1
+        print pagemax
+        if (page >= pagemax):
+            page = pagemax
         cur = g.db.execute('select * from news limit ?, 10',[(page * 10) - 10])
         entries = []
         for row in cur.fetchall():
@@ -45,4 +51,4 @@ def news(id_news=None, page=None):
             commentaire = [dict(nb=row[0]) for row in tmp.fetchall()]
             dic['nb_com'] = commentaire[0]['nb']
             entries.append(dic)
-        return render_template('news.html', entries=entries)
+        return render_template('news.html', entries=entries, page=int(page), pagemax=int(pagemax))

@@ -8,4 +8,11 @@
 </p>
         Nombre de commentaire : <a href="{{url_for('news', id_news=ret['id'])}}">{{ ret["nb_com"] }}</a>
 {% endfor %}
+<br>
+{% if page != 1 %}
+ <a href="{{url_for('news', page=page - 1)}}">Page Précédante</a>
+{% endif %}
+{% if page < pagemax %}
+<a href="{{url_for('news', page=page + 1)}}">Page Suivante</a>
+{% endif %}
 {% endblock %}
