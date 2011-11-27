@@ -1,42 +1,42 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" >
+<html lang="fr">	
   <head>
-    <title>Dota 2 Arena</title>
-    <meta charset="utf-8" />
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-    </head>
-  
+    <meta charset="UTF-8">
+    <title>Dota 2 Arena</title> 
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='wait.css') }}" />
+  </head>
   <body>
-    <div id="en_tete">
-      
+    <section id="contenu">
+      <div id="fond">
+      <div id="menu">
+	<div id="menu-accueil">
+	  <a href="{{ url_for('default') }}">Accueil</a>
+	</div>
+	<div id="menu-guide">
+	  <a href="{{ url_for('guide') }}">Guides</a>
+	</div>
+	<div id="menu-hero">
+	  <a href="{{ url_for('hero') }}">Heros</a>
+	</div>
+	<div id="menu-item">
+	  <a href="{{ url_for('item') }}">Items</a>
+	</div>
+	<div id="menu-contact">
+	  <a href="http://www.infosgeek.com/contact.html">Nous Contacter</a>
+	</div>
+      </div>
+      <div id="corps">
+	{% for message in get_flashed_messages() %}
+	<div class="flash">{{ message }}</div>
+	{% endfor %}
+	{% block body %}{% endblock %}
+      </div>
+    <div id="footer">
+      <div id="footer-img">
+	<img src="{{ url_for('static', filename='images/design/footer.png') }}"\>
+      </div>			
     </div>
-    
-    <div id="menu">
-      <a href="{{ url_for('default') }}">Accueil</a> | 
-      <a href="{{ url_for('guide') }}">Guides</a> | 
-      <a href="{{ url_for('hero') }}">Heros</a> | 
-      <a href="{{ url_for('item') }}">Items</a>
     </div>
-    
-    <div id="connection">
-      {% if not session.logged_in %}
-      <a href="{{ url_for('login') }}">Connectez-vous</a>
-      <a href="{{ url_for('add_user') }}">Inscription</a>
-      {% else %}
-      <a href="{{ url_for('logout') }}">Deconnexion</a>
-      {% endif %}
-    </div> 
-    
-    <div id="corps">
-      {% for message in get_flashed_messages() %}
-      <div class=flash>{{ message }}</div>
-      {% endfor %}
-      {% block body %}{% endblock %}
-    </div>
-    
-    <div id="pied_de_page">
-      
-    </div>
-    
+    </section>
   </body>
 </html>
