@@ -7,15 +7,12 @@ body {
     background-position:center;
     background-repeat: repeat-y;*/
     color:#939393;
+    font-family: "Geneva";
 }
 
-/*body {
-    color:grey;
-    background-color:#160203;
-    background-image:url(images/design/top_bg.jpg);
-    background-repeat:no-repeat;
-    background-position: top center;}
-*/
+body a{
+    color:#939393;}
+
 h3 {
     color: white;
     font-weight: bold;
@@ -29,6 +26,12 @@ h3 {
     height: 56px;
     padding-top: 10px;
     position: relative;}
+
+#connection {
+    width: 1040px;
+    padding-top: 20px;
+    position: relative;
+    padding-left: 40px;}
 
 #top {
     width: 1040px;}
@@ -148,7 +151,7 @@ h3 {
     margin:auto;}
 
 #corps {
-    padding-top: 30px;
+    padding-top: 10px;
     padding-left: 40px;
     padding-right: 40px;
     /*margin:auto;*/}
