@@ -156,6 +156,12 @@ h3 {
     padding-right: 40px;
     /*margin:auto;*/}
 
+#corps h2 {
+padding-top: 10px;}
+
+#corps h3 {
+    text-align: left;}
+
 /*   Footer    */
 #footer {
     padding-top: 50px;

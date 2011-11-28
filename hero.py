@@ -12,8 +12,8 @@ def connect_db(base):
 def hero(name=None):
     g.db = connect_db(app.config['USER_DB'])
     if name == None:
-        cur = g.db.execute('select nam from hero order by nam asc')
-        entries = [dict(name=row[0]) for row in cur.fetchall()]
+        cur = g.db.execute('select nam, typ, des from hero order by nam asc')
+        entries = [dict(name=row[0],type=row[1],des=row[2]) for row in cur.fetchall()]
         g.db.close()
         return render_template('hero-list.html', entries = entries)
     else:

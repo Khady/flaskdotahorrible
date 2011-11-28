@@ -18,8 +18,10 @@ def news(id_news=None, page=None):
         g.db = connect_db(app.config['USER_DB'])
         cur = g.db.execute('select * from news where id = ?', [id_news])
         entries = [dict(id_news=row[0], titre=row[1], auteur=row[2],
-                        tag=row[3], news=Markup(row[5]))
+                        tag=row[3], news=Markup(row[5]), date=row[6])
                    for row in cur.fetchall()]
+        date = datetime.strptime(entries[0]['date'], "%Y-%m-%d %H:%M:%S.%f")
+        entries[0]['date'] = date.strftime(u"%d %B %Y à %H:%M:%S".encode('utf-8')).decode('utf-8')
         if len(entries) != 0:
             cur = g.db.execute("select * from commentaire where id_genre = ? and genre like 'news'",
                                [entries[0]['id_news']])
@@ -48,7 +50,9 @@ def news(id_news=None, page=None):
         entries = []
         for row in cur.fetchall():
             dic = {'id': row[0], 'titre': row[1], 'auteur': row[2],
-                   'tag': row[3], 'news': Markup(row[5])}
+                   'tag': row[3], 'news': Markup(row[5]), 'date': row[6]}
+            date = datetime.strptime(dic['date'], "%Y-%m-%d %H:%M:%S.%f")
+            dic['date'] = date.strftime(u"%d %B %Y à %H:%M:%S".encode('utf-8')).decode('utf-8')
             tmp = g.db.execute("SELECT Count(*) FROM commentaire where genre like 'news' and id_genre = ?", str(row[0]));
             commentaire = [dict(nb=row[0]) for row in tmp.fetchall()]
             print commentaire[0]['nb']
