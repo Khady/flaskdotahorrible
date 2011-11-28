@@ -1,5 +1,8 @@
+#-*- encoding: utf-8 -*-
+
 import sqlite3
 import markdown
+import unicodedata as ud
 from flask import render_template, g, url_for, redirect, request, Markup, session
 from dota2 import app
 from datetime import datetime
@@ -26,13 +29,19 @@ def post_comment(id_genre=None):
                         return render_template('post_comment.html',
                                                id_comment=id_comment,
                                                entries=entries[0])
-            if request.form['mode_post'] == 'Avancer':
+            if request.form['mode_post'].encode('utf-8') == 'Avancé':
+                print request.form['mode_post']
                 entries = dict(genre=request.form['genre'],
-                               id_genre=request.form['id_genre'],
-                               comment="")
+                               id_genre=id_genre,
+                               comment=request.form['comment'])
                 return render_template('post_comment.html',
                                        entries=entries)
             temp = request.args.get('id_comment', '')
+            if request.form['comment'] == '':
+                if request.form['genre'] == 'news':
+                    return redirect(url_for('news', id_news=id_genre))
+                else:
+                    return redirect(url_for('guide', id=id_genre))
             if (temp != ''):
                 id_comment = int(temp)
             else:

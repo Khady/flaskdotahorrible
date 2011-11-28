@@ -1,4 +1,6 @@
 #!/usr/bin/env python2
+#-*- encoding: utf-8 -*-
+
 import smtplib
 from email.mime.text import MIMEText
 

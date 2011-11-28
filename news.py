@@ -1,3 +1,5 @@
+#-*- encoding: utf-8 -*-
+
 import sqlite3
 import markdown
 from flask import render_template, g, url_for, redirect, request, Markup, session
@@ -42,13 +44,14 @@ def news(id_news=None, page=None):
         print pagemax
         if (page >= pagemax):
             page = pagemax
-        cur = g.db.execute('select * from news limit ?, 10',[(page * 10) - 10])
+        cur = g.db.execute('select * from news order by id desc limit ?, 10',[(page * 10) - 10])
         entries = []
         for row in cur.fetchall():
             dic = {'id': row[0], 'titre': row[1], 'auteur': row[2],
                    'tag': row[3], 'news': Markup(row[5])}
-            tmp = g.db.execute("SELECT Count(*) FROM commentaire where genre like 'news' and id_genre = ?", '1');
+            tmp = g.db.execute("SELECT Count(*) FROM commentaire where genre like 'news' and id_genre = ?", str(row[0]));
             commentaire = [dict(nb=row[0]) for row in tmp.fetchall()]
+            print commentaire[0]['nb']
             dic['nb_com'] = commentaire[0]['nb']
             entries.append(dic)
         return render_template('news.html', entries=entries, page=int(page), pagemax=int(pagemax))

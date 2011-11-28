@@ -1,3 +1,5 @@
+#-*- encoding: utf-8 -*-
+
 import sqlite3
 from flask import render_template, g, url_for, redirect
 from dota2 import app
