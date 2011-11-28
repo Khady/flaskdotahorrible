@@ -15,6 +15,12 @@ def connect_db(base):
 def post_comment(id_genre=None):
     if 'logged_in' in session:
         if (request.method == 'POST'):
+            if request.form['mode_post'].encode('utf-8') == 'Prévisualisation':
+                entries = dict(genre=request.form['genre'],
+                               id_genre=id_genre,
+                               comment=request.form['comment'])
+                return render_template('post_comment.html',
+                                       entries=entries, comment=entries['comment'], id_comment=None, prevu=1)
             if request.form['mode_post'] == 'Edition':
                 id_comment = request.args.get('id_comment', '')
                 if id_comment != None:
