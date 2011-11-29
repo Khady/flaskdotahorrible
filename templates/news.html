@@ -5,8 +5,10 @@
 <div id="auteur" style="text-align:left;float:left;">Rédigé par {{ ret["auteur"] }}.</div>
 <p style="padding-top:20px;">
 {{ ret["news"] }}
+<div id="date" style="text-align:left;width:50%;float:left;">Posté le {{ ret["date"] }}</div>
+<div id="commentaire" style="text-align:right;width:50%;float:right;">Nombre de commentaire : <a href="{{url_for('news', id_news=ret['id'])}}">{{ ret["nb_com"] }}</a></div>
 </p>
-        <div id="date" style="text-align:left;width:50%;float:left;">Posté le {{ ret["date"] }}</div><div id="commentaire" style="text-align:right;width:50%;float:right;">Nombre de commentaire : <a href="{{url_for('news', id_news=ret['id'])}}">{{ ret["nb_com"] }}</a></div>
+<br />
 {% endfor %}
 <br>
 {% if page != 1 %}

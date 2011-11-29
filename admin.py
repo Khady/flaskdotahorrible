@@ -50,16 +50,24 @@ def guide_validation():
         return redirect(url_for('default'))
     cur = g.db.execute('select id, title, hero, heroname, score, valid from guide')
     guides = [dict(id=row[0], titre=row[1], hero=row[2], heroname=row[3], score=row[4], valid=row[5]) for row in cur.fetchall()]
+    cur = g.db.execute('select id, title, hero, heroname, score, valid, id_guide from guidetmp')
+    guidestmp = [dict(id=row[0], titre=row[1], hero=row[2], heroname=row[3], score=row[4], valid=row[5], id_guide=row[6]) for row in cur.fetchall()]
     print guides
-    if request.method == 'GET':
-        g.db.close()
-        return render_template('guides_adm.html', guides=guides)
-    else:
-        for guide in guides:
-            print guide['heroname']
-            guide['valid'] = int(request.form[guide['heroname']])
-            g.db.execute('update guide set valid = ? where id = ?', [guide['valid'], guide['id']])
-            g.db.commit()
-        flash("Modifications enregistrees")
-        g.db.close()
-        return render_template('guides_adm.html', guides=guides)
+    if request.method != 'GET':
+        if request.form['submit'] == 'Valider':
+            for guide in guides:
+                guide['valid'] = int(request.form[guide['heroname']])
+                g.db.execute('update guide set valid = ? where id = ?', [guide['valid'], guide['id']])
+                g.db.commit()
+            flash("Modifications enregistrees")
+            g.db.close()
+        else:
+            for guide in guidestmp:
+                guide['valid'] = int(request.form[guide['heroname']])
+                g.db.execute('update guidetmp set valid = ? where id = ?', [guide['valid'], guide['id']])
+                # rajouter condition si valid == 1 passer dans l'autre table
+                # si valid == 2, supprimer
+                g.db.commit()
+            flash("Modifications enregistrees")
+            g.db.close()
+    return render_template('guides_adm.html', guides=guides, guidestmp=guidestmp)

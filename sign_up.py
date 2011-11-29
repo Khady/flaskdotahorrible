@@ -97,15 +97,14 @@ def add_user():
                      [entries[0]['user_id'], code_val])
         g.db.commit()
         # On met l'utilisateur dans le groupe 'user' lors de son inscription
-        g.db.execute("insert into user_group ('id', 'id_user', 'gadm') values (?, ?, ?)", [2, entries[0]['user_id'], 0])
+        g.db.execute("insert into user_group ('id_group', 'id_user', 'gadm') values (?, ?, ?)", [2, entries[0]['user_id'], 0])
         g.db.commit()
         # on donne le code a l'utilisateur
         #Mail.send(mail, "Validation compte Dota 2 Arena",
         #          ("Voici votre url d'activation\nhttp://dota2arena.com%s\n" % url_for('activate', code_val = code_val)))
         print    ("Voici votre url d'activation\nhttp://dota2-arena.com%s\n" % url_for('activate', code_val = code_val))
-
         g.db.close()
-        flash('Bienvenue sur Dota 2 Arena !')
+        flash('Bienvenue sur Dota 2 Arena ! Regardez vos mails pour valider votre compte (pensez à vérifier vos spams).')
         return redirect(url_for('login'))
     return render_template('sign_up.html', error=error)
 
