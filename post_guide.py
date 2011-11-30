@@ -156,15 +156,26 @@ def add_guide(valid):
 
 def update_guide(id_guide):
     g.db = connect_db(app.config['USER_DB'])
-    g.db.execute('update guidetmp set title = ?, tag = ?, hero = ?, heroname = ?, difficulte = ?, content_untouch = ?, content_markup = ?, date_last_modif = ?, valid = ? where id_guide = ?',
-                 [request.form['titre'],
+    g.db.execute('insert into guidetmp (id_guide, title, tag, hero, heroname, difficulties, content_untouch, content_markup, date_last_modif, valid) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                 [id_guide,
+                  request.form['titre'],
                   request.form['tag'],
                   request.form['hero'],
                   get_heroName(request.form['hero']),
                   request.form['difficulte'],
                   request.form['content'],
-                  parse_balise(markdown(Markup.escape(request.form['guide'])), get_heroName(request.form['hero'])),
-                  datetime.today(), 0, id_guide])
+                  markdown(Markup.escape(request.form['content'])),
+                  datetime.today(),
+                  0])
+    # g.db.execute('update guidetmp set title = ?, tag = ?, hero = ?, heroname = ?, difficulte = ?, content_untouch = ?, content_markup = ?, date_last_modif = ?, valid = ? where id_guide = ?',
+    #              [request.form['titre'],
+    #               request.form['tag'],
+    #               request.form['hero'],
+    #               get_heroName(request.form['hero']),
+    #               request.form['difficulte'],
+    #               request.form['content'],
+    #               parse_balise(markdown(Markup.escape(request.form['guide'])), get_heroName(request.form['hero'])),
+    #               datetime.today(), 0, id_guide])
     g.db.commit()
     g.db.close()
 
@@ -179,6 +190,14 @@ def get_heroName(id_hero):
     cur = g.db.execute('select nam from hero where id = ?', [id_hero])
     heroname = [row[0] for row in cur.fetchall()][0]
     return heroname
+
+def isGuideCreator(uid, id_guide):
+    g.db = connect_db(app.config['USER_DB'])
+    cur = g.db.execute('select autor from guide where id = ?', [id_guide])
+    autor = cur.fetch()[0]
+    if autor == uid:
+        return True
+    return False
 
 def mail_guide(id_guide):
     g.db = connect_db(app.config['USER_DB'])
@@ -202,6 +221,10 @@ def post_guide(id_guide=None):
         heros = get_heros()
         g.db.close()
         herolen = len(heros)
+        if id_guide != None:
+            if isGuideCreator(uid, id_guide) != True and droits['guide'] != 1:
+                # flash("Vous n'avez pas les droits pour editer ce guide")
+                return (url_for('guide', id_guide = id_guide))
         if (request.method == 'POST'):
             if request.form['mode_post'] == 'Previsualisation':
                 guide = (Markup.escape(request.form['content']))
@@ -222,6 +245,7 @@ def post_guide(id_guide=None):
                 val = valid_guide(heros)
                 if val != True:
                     return val
+                # flash('Ce guide doit maintenant etre valide, il sera disponible sous peu.')
                 # mail_guide(id_guide)
                 if (id_guide == None):
                     id_guide = add_guide(droits['guide'])

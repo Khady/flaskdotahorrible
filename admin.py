@@ -40,7 +40,6 @@ def user_adm():
             g.db.execute('update user_description set mail = ? where id = ?', [mail, session['user_id']])
         if len(password) != 0:
             g.db.execute('update user_description set hash = ? where id = ?', [pass_hash, session['user_id']])
-        flash("Modifications enregistrees")
         return redirect(url_for('user_adm'))
 
 @app.route('/admin/guides', methods=['GET', 'POST'])
@@ -49,25 +48,50 @@ def guide_validation():
     if 'logged_in' not in session or get_droits(session['user_id'])['guide_validation'] != 1:
         return redirect(url_for('default'))
     cur = g.db.execute('select id, title, hero, heroname, score, valid from guide')
-    guides = [dict(id=row[0], titre=row[1], hero=row[2], heroname=row[3], score=row[4], valid=row[5]) for row in cur.fetchall()]
+    guides = [dict(id=row[0], titre=row[1], hero=row[2], heroname=row[3],
+                   score=row[4], valid=row[5]) for row in cur.fetchall()]
     cur = g.db.execute('select id, title, hero, heroname, score, valid, id_guide from guidetmp')
-    guidestmp = [dict(id=row[0], titre=row[1], hero=row[2], heroname=row[3], score=row[4], valid=row[5], id_guide=row[6]) for row in cur.fetchall()]
+    guidestmp = [dict(id=row[0], titre=row[1], hero=row[2], heroname=row[3],
+                      score=row[4], valid=row[5], id_guide=row[6]) for row in cur.fetchall()]
     print guides
     if request.method != 'GET':
         if request.form['submit'] == 'Valider':
             for guide in guides:
                 guide['valid'] = int(request.form[guide['heroname']])
-                g.db.execute('update guide set valid = ? where id = ?', [guide['valid'], guide['id']])
+                if guide['valid'] == 2:
+                    g.db.execute('delete from guide where id = ?', [guide['id']])
+                else:
+                    g.db.execute('update guide set valid = ? where id = ?', [guide['valid'], guide['id']])
                 g.db.commit()
-            flash("Modifications enregistrees")
             g.db.close()
         else:
             for guide in guidestmp:
                 guide['valid'] = int(request.form[guide['heroname']])
-                g.db.execute('update guidetmp set valid = ? where id = ?', [guide['valid'], guide['id']])
-                # rajouter condition si valid == 1 passer dans l'autre table
-                # si valid == 2, supprimer
+                if guide['valid'] == 2:
+                    g.db.execute('delete from guide where id = ?', [guide['id']])
+                elif guide['valid'] == 1:
+                    if guide['id_guide'] == None:
+                        g.db.execute('insert into guidetmp (title, tag, hero, heroname, difficulties, content_untouch, content_markup, date_last_modif, valid) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                                     [guide['titre'],
+                                      guide['tag'],
+                                      guide['hero'],
+                                      guide['heroname'],
+                                      guide['diff'],
+                                      guide['content'],
+                                      guide['content_markup'],
+                                      guide['date_last_modif'],
+                                      1])
+                    else:
+                        g.db.execute('update guide set title = ?, tag = ?, hero = ?, heroname = ?, difficulties = ?, content_untouch = ?, content_markup = ?, date_last_modif = ?, valid = ?'
+                                     [guide['titre'],
+                                      guide['tag'],
+                                      guide['hero'],
+                                      guide['heroname'],
+                                      guide['diff'],
+                                      guide['content'],
+                                      guide['content_markup'],
+                                      guide['date_last_modif'],
+                                      1])
                 g.db.commit()
-            flash("Modifications enregistrees")
             g.db.close()
     return render_template('guides_adm.html', guides=guides, guidestmp=guidestmp)
