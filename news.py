@@ -1,8 +1,8 @@
-#-*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import sqlite3
 import markdown
-from flask import render_template, g, url_for, redirect, request, Markup, session
+from flask import render_template, g, url_for, redirect, request, Markup, session, get_flashed_messages
 from dota2 import app
 from datetime import datetime
 
@@ -20,7 +20,7 @@ def news(id_news=None, page=None):
         entries = [dict(id_news=row[0], titre=row[1], auteur=row[2],
                         tag=row[3], news=Markup(row[5]), date=row[6])
                    for row in cur.fetchall()]
-        date = datetime.strptime(entries[0]['date'], "%Y-%m-%d %H:%M:%S.%f")
+        date = datetime.strptime(entries[0]['date'], u"%Y-%m-%d %H:%M:%S.%f")
         entries[0]['date'] = date.strftime(u"%d %B %Y à %H:%M:%S".encode('utf-8')).decode('utf-8')
         if len(entries) != 0:
             cur = g.db.execute("select * from commentaire where id_genre = ? and genre like 'news'",
@@ -58,4 +58,6 @@ def news(id_news=None, page=None):
             #print commentaire[0]['nb']
             dic['nb_com'] = commentaire[0]['nb']
             entries.append(dic)
+        for message in get_flashed_messages():
+            print message
         return render_template('news.html', entries=entries, page=int(page), pagemax=int(pagemax))

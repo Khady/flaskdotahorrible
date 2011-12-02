@@ -29,10 +29,10 @@ def valid_user(code_val):
         g.db.execute('update user_description set valid = 1 where id == ?', [entries[0]['user_id']])
         g.db.execute('delete from user_validation where id == ?',  [entries[0]['user_id']])
         g.db.commit()
-        flash("Compte vient d'etre activer")
+        flash(u"Compte vient d'être activé")
         return redirect(url_for('default'))
     else:
-        flash("code d'activation invalide")
+        flash(u"code d'activation invalide")
         return render_template('activate.html')
 
 
@@ -70,15 +70,15 @@ def add_user():
         for elem in entries:
             error = ''
             if login.lower() == elem['login'].lower():
-                error = ' Identifiant deja existant '
+                error = u' Identifiant déjâ éxistant '
                 break
             elif mail == elem['mail'].lower():
-                error += 'Adresse mail deja existante '
+                error += u'Adresse mail déjà existante '
                 break
             else:
                 error = None
         if password == "":
-            error = 'Password incorrect'
+            error = 'Mot de passe incorrect'
 
         if error != None:
             return render_template('sign_up.html', error=error)
@@ -104,14 +104,14 @@ def add_user():
         #          ("Voici votre url d'activation\nhttp://dota2arena.com%s\n" % url_for('activate', code_val = code_val)))
         print    ("Voici votre url d'activation\nhttp://dota2-arena.com%s\n" % url_for('activate', code_val = code_val))
         g.db.close()
-        flash('Bienvenue sur Dota 2 Arena ! Regardez vos mails pour valider votre compte (pensez à vérifier vos spams).')
+        flash(u'Bienvenue sur Dota 2 Arena ! Regardez vos mails pour valider votre compte (pensez à vérifier vos spams).')
         return redirect(url_for('login'))
     return render_template('sign_up.html', error=error)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if 'logged_in' in session:
-        flash('Vous etes deja connecte')
+        flash(u'Vous êtes déjà connecté')
         return redirect(url_for('default'))
     error = None
     if request.method == 'POST':
@@ -130,7 +130,7 @@ def login():
                 session['logged_in'] = True
                 session['user_login'] = elem['login']
                 session['user_id'] = elem['user']
-                flash('Vous etes maintenant connecte')
+                flash(u'Vous êtes maintenant connecté')
                 g.db.close()
                 return redirect(url_for('default'))
 
@@ -143,5 +143,5 @@ def login():
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     session.pop('logged_in', None)
-    flash('Vous venez de vous deconnecter')
+    flash(u'Vous venez de vous deconnecter')
     return redirect(url_for('default'))

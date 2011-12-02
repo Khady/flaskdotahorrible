@@ -5,7 +5,7 @@
   <div id="hero-biographie"><h2>Biographie :</h2>{{ entries[0]["bio"] }}</div>
   <div id="hero-info">
       <p>
-      <img src="{{ url_for('static', filename='hero/'+entries[0]['name']+'.jpg') }}" alt="{{ entries[0]['name'] }}" /><br/>
+      <img src="{{ url_for('static', filename='hero/'+entries[0]['name']+'.png') }}" alt="{{ entries[0]['name'] }}" /><br/>
       Type de hero: {{ entries[0]["typ"] }}<br/>
       {{ entries[0]["str_start"] }} + {{ entries[0]["str_lvl"] }}
       {{ entries[0]["agi_start"] }} + {{ entries[0]["agi_lvl"] }}

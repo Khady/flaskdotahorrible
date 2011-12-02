@@ -1,4 +1,3 @@
-#-*- encoding: utf-8 -*-
 
 from flask import Flask, url_for, redirect
 
@@ -11,7 +10,6 @@ SITEURL = "http://dota2-arena.com/"
 # create our little application :)
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 from sign_up import *
 from hero import *
@@ -29,7 +27,8 @@ from admin import *
 
 @app.route('/', methods=['GET'])
 def default():
-    flash('Bienvenue sur Dota 2 Arena')
+    uni = u'Bienvenue sur Dota 2 Arena'.encode('utf-8')
+    flash(uni)
     return news()
 
 if __name__ == '__main__':

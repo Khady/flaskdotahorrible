@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
+  <meta charset=utf-8>
     <title>Dota 2 Arena</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='wait.css') }}"/>
 </head>
@@ -22,7 +22,7 @@
                 <a href="{{ url_for('item') }}">Items</a>
             </div>
             <div id="menu-contact">
-                <a href="http://www.infosgeek.com/contact.html">Nous Contacter</a>
+                <a href="/">Nous Contacter</a>
             </div>
         </div>
         <div id="connection">
@@ -34,10 +34,16 @@
             {% endif %}
         </div>
         <div id="corps">
-            {% for message in get_flashed_messages() %}
-            <div class="flash">{{ message }}</div>
-            {% endfor %}
-            {% block body %}{% endblock %}
+	  {% with flashes = get_flashed_messages() %}
+	  {% if flashes %}
+	  <ul class=flashes>
+	    {% for message in flashes %}
+            <li>{{ message }}
+	      {% endfor %}
+	  </ul>
+	  {% endif %}
+	  {% endwith %}
+	  {% block body %}{% endblock %}
         </div>
         <div id="footer">
             <div id="footer-img">
