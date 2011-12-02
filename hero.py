@@ -1,7 +1,7 @@
 #-*- encoding: utf-8 -*-
 
 import sqlite3
-from flask import render_template, g, url_for, redirect
+from flask import render_template, g, url_for, redirect, Markup
 from dota2 import app
 
 def connect_db(base):
@@ -30,16 +30,8 @@ def hero(name=None):
             return redirect(url_for('hero'))
         cur = g.db.execute('select * from spells where name_hero = ? order by pos asc', [entries[0]['name']])
         spells = [dict(id_spell=row[0], name_hero=row[1], name=row[2],
-                       des=row[3], abi_type=row[4], allo_tar=row[5],
-                       pos=row[6]) for row in cur.fetchall()]
-        spell_des = []
-        for result in spells:
-            cur = g.db.execute('select * from spells_effect where id_spell = ? order by lvl_spell asc', [result['id_spell']])
-            for row in cur.fetchall():
-                spell_des.append([dict(id_spell=row[1], lvl_spell=row[2],
-                                       cd=row[3], rang=row[4],
-                                       mana_cost=row[5], life_cost=row[6],
-                                       aoe=row[7], effect=row[8])])
+                       tooltip=Markup(row[3]),
+                       pos=row[5]) for row in cur.fetchall()]
         g.db.close()
         return render_template('hero.html', entries=entries,
-                               spells=spells, spell_des=spell_des)
+                               spells=spells)

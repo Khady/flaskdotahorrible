@@ -9,15 +9,10 @@
        <select name="hero" id="hero">
 	   {% for i in range(len) %}
            <option value="{{ entries[i]['name'] }}">{{ entries[i]['name'] }}</option>
-	   {% endfor %}
+           {% endfor %}
        </select><br />
-       <label for="spell">Quel hero voulez vous modifier les sorts?</label><br />
-       <select name="spell" id="spell">
-           <option value="1">Skill 1</option>
-	   <option value="2">Skill 2</option>
-	   <option value="3">Skill 3</option>
-	   <option value="4">Ulti</option>
-       </select>
+       <label for="pos_skill">Position du Skill: </label><br />
+       <input type="text" name="pos_skill"><br/>
    </p>
    <input type=submit value="Validation">
   </form>
@@ -26,70 +21,12 @@
    <p>
      <label for="nam_skill">Nom du Skill: </label><br />
      <input type=text {% if len_entries %} value="{{ entries[0]['nam'] }}" {% endif %} name="nam_skill"> <br/>
-     <label for="des_skill">Description du Skill: </label><br />
-     <input type=text {% if len_entries %} value="{{ entries[0]['des'] }}" {% endif %} name="des_skill"> <br/>
-     <label for="abi_type_skill">Type de capacite du Skill: </label><br />
-     <input type=text {% if len_entries %} value="{{ entries[0]['abi_type'] }}" {% endif %} name="abi_type_skill"> <br/>
-     <label for="tar_type_skill">Type de ciblage du Skill: </label><br />
-     <input type=text {% if len_entries %} value="{{ entries[0]['tar_type'] }}" {% endif %} name="tar_type_skill"> <br/>
-     <label for="allo_tar_skill">Type de cible autorise du Skill: </label><br />
-     <input type=text {% if len_entries %} value="{{ entries[0]['allo_tar'] }}" {% endif %} name="allo_tar_skill"> <br/>
+     <label for="tooltip">Tooltip du spell: </label><br />
+     <textarea  name="tooltip" rows="15" style="width: 100%;">{% if len_entries %}{{ entries[0]['tooltip_untouch'] }}{% endif %}</textarea><br/>
      <label for="pos_skill">Position du Skill: </label><br />
-     <input type=text {% if pos %} value="{{ pos }}" {% endif %} name="pos_skill">
-     <input type=hidden {% if len_entries %} value="0" {% else %} value="1" {% endif %} name="modif">
-     
-     <table>
-       <tr>
-	 <th>Niveau du sort</th>
-	 <th>Cooldown</th>
-	 <th>Portee</th>
-	 <th>Cout en mana</th>
-	 <th>Cout en vie</th>
-	 <th>Zone d'Effet</th>
-	 <th>Effet</th>
-       </tr>
-       <tr>
-	 <td>LvL 1</td>
-	 <td><input type=text {% if len_spell1 %} value="{{ spell1[0]['cd'] }}" {% endif %} name="cd_lvl1"></td>
-	 <td><input type=text {% if len_spell1 %} value="{{ spell1[0]['rang'] }}" {% endif %} name="rang_lvl1"></td>
-	 <td><input type=text {% if len_spell1 %} value="{{ spell1[0]['mana_cost'] }}" {% endif %} name="mana_cost_lvl1"></td>
-	 <td><input type=text {% if len_spell1 %} value="{{ spell1[0]['life_cost'] }}" {% endif %} name="life_cost_lvl1"></td>
-	 <td><input type=text {% if len_spell1 %} value="{{ spell1[0]['aoe'] }}" {% endif %} name="aoe_lvl1"></td>
-	 <td><input type=text {% if len_spell1 %} value="{{ spell1[0]['effect'] }}" {% endif %} name="effect_lvl1"></td>
-       </tr>
-       <tr>
-	 <td>LvL 2</td>
-	 <td><input type=text {% if len_spell2 %} value="{{ spell2[0]['cd'] }}" {% endif %} name="cd_lvl2"></td>
-	 <td><input type=text {% if len_spell2 %} value="{{ spell2[0]['rang'] }}" {% endif %} name="rang_lvl2"></td>
-	 <td><input type=text {% if len_spell2 %} value="{{ spell2[0]['mana_cost'] }}" {% endif %} name="mana_cost_lvl2"></td>
-	 <td><input type=text {% if len_spell2 %} value="{{ spell2[0]['life_cost'] }}" {% endif %} name="life_cost_lvl2"></td>
-	 <td><input type=text {% if len_spell2 %} value="{{ spell2[0]['aoe'] }}" {% endif %} name="aoe_lvl2"></td>
-	 <td><input type=text {% if len_spell2 %} value="{{ spell2[0]['effect'] }}" {% endif %} name="effect_lvl2"></td>
-       </tr>
-       <tr>
-	 <td>LvL 3</td>
-	 <td><input type=text {% if len_spell3 %} value="{{ spell3[0]['cd'] }}" {% endif %} name="cd_lvl3"></td>
-	 <td><input type=text {% if len_spell3 %} value="{{ spell3[0]['rang'] }}" {% endif %} name="rang_lvl3"></td>
-	 <td><input type=text {% if len_spell3 %} value="{{ spell3[0]['mana_cost'] }}" {% endif %} name="mana_cost_lvl3"></td>
-	 <td><input type=text {% if len_spell3 %} value="{{ spell3[0]['life_cost'] }}" {% endif %} name="life_cost_lvl3"></td>
-	 <td><input type=text {% if len_spell3 %} value="{{ spell3[0]['aoe'] }}" {% endif %} name="aoe_lvl3"></td>
-	 <td><input type=text {% if len_spell3 %} value="{{ spell3[0]['effect'] }}" {% endif %} name="effect_lvl3"></td>
-       </tr>
-       <tr>
-	 <td>LvL 4</td>
-	 <td><input type=text {% if len_spell4 %} value="{{ spell4[0]['cd'] }}" {% endif %} name="cd_lvl4"></td>
-	 <td><input type=text {% if len_spell4 %} value="{{ spell4[0]['rang'] }}" {% endif %} name="rang_lvl4"></td>
-	 <td><input type=text {% if len_spell4 %} value="{{ spell4[0]['mana_cost'] }}" {% endif %} name="mana_cost_lvl4"></td>
-	 <td><input type=text {% if len_spell4 %} value="{{ spell4[0]['life_cost'] }}" {% endif %} name="life_cost_lvl4"></td>
-	 <td><input type=text {% if len_spell4 %} value="{{ spell4[0]['aoe'] }}" {% endif %} name="aoe_lvl4"></td>
-	 <td><input type=text {% if len_spell4 %} value="{{ spell4[0]['effect'] }}" {% endif %} name="effect_lvl4"></td>
-       </tr>
-     </table>
-   </p>
-   <input type=hidden {% if len_spell1 %} value="0" {% else %} value="1" {% endif %} name="modif_lvl1">
-   <input type=hidden {% if len_spell2 %} value="0" {% else %} value="1" {% endif %} name="modif_lvl2">
-   <input type=hidden {% if len_spell3 %} value="0" {% else %} value="1" {% endif %} name="modif_lvl3">
-   <input type=hidden {% if len_spell4 %} value="0" {% else %} value="1" {% endif %} name="modif_lvl4">
+     <input type="text" {% if pos %} value="{{ pos }}" {% endif %} name="pos_skill"><br/>
+     <input type="hidden" {% if len_entries %} value="0" {% else %} value="1" {% endif %} name="modif">
+     <input type="hidden" {% if len_entries %} value="{{ entries[0]['id'] }}" {% else %} value="" {% endif %} name="id">
    <input type=submit value="Validation">
   </form>
 {% endif %}

@@ -1,57 +1,36 @@
 {% extends "layout.html" %}
 {% block body %}
-<h2>{{ entries[0]["name"] }}</h2>
-<p>
-  {{ entries[0]["typ"] }}<br/>
-  {{ entries[0]["des"] }}<br/>
-  {{ entries[0]["bio"] }}<br/>
-  {{ entries[0]["str_start"] }}<br/>
-  {{ entries[0]["agi_start"] }}<br/>
-  {{ entries[0]["int_start"] }}<br/>
-  {{ entries[0]["str_lvl"] }}<br/>
-  {{ entries[0]["agi_lvl"] }}<br/>
-  {{ entries[0]["int_lvl"] }}<br/>
-  {{ entries[0]["life"] }}<br/>
-  {{ entries[0]["mana"] }}<br/>
-  {{ entries[0]["damages"] }}<br/>
-  {{ entries[0]["rang"] }}<br/>
-  {{ entries[0]["cast_speed"] }}<br/>
-  {{ entries[0]["anim_speed"] }}<br/>
-  {{ entries[0]["vision"] }}<br/>
-  {{ entries[0]["armor"] }}<br/>
-  {{ entries[0]["aspeed"] }}<br/>
-  {{ entries[0]["ms"] }}<br/>
-  {% for spell in spells %}
-  {{ spell["name"] }}<br/>
-  {{ spell["des"] }}<br/>
-  {{ spell["abi_type"] }}<br/>
-  {{ spell["allo_tar"] }}<br/>
-       <table>
-       <tr>
-	 <th>Niveau du sort</th>
-	 <th>Cooldown</th>
-	 <th>Portee</th>
-	 <th>Cout en mana</th>
-	 <th>Cout en vie</th>
-	 <th>Zone d'Effet</th>
-	 <th>Effet</th>
-       </tr>
-       {% for des in spell_des %}
-       {% for elem in des %}
-       {% if elem["id_spell"] == spell["id_spell"] %}
-       <tr>
-	 <td>LvL {{elem["lvl_spell"]}}</td>
-	 <td>{{elem["cd"]}}</td>
-	 <td>{{elem["rang"]}}</td>
-	 <td>{{elem["mana_cost"]}}</td>
-	 <td>{{elem["life_cost"]}}</td>
-	 <td>{{elem["aoe"]}}</td>
-	 <td>{{elem["effect"]}}</td>
-       </tr>
-       {% endif %}
-       {% endfor %}
-       {% endfor %}
-     </table>
-  {% endfor%}
-</p>
+<h1>{{ entries[0]["name"] }}</h1>
+<div id ="hero">
+  <div id="hero-biographie"><h2>Biographie :</h2>{{ entries[0]["bio"] }}</div>
+  <div id="hero-info">
+      <p>
+      <img src="{{ url_for('static', filename='hero/'+entries[0]['name']+'.jpg') }}" alt="{{ entries[0]['name'] }}" /><br/>
+      Type de hero: {{ entries[0]["typ"] }}<br/>
+      {{ entries[0]["str_start"] }} + {{ entries[0]["str_lvl"] }}
+      {{ entries[0]["agi_start"] }} + {{ entries[0]["agi_lvl"] }}
+      {{ entries[0]["int_start"] }} + {{ entries[0]["int_lvl"] }}<br/>
+      Vie : {{ entries[0]["life"] }}
+      Mana : {{ entries[0]["mana"] }}<br/>
+      {{ entries[0]["damages"] }} Porté: {{ entries[0]["rang"] }}<br/>
+      Durée de l'animation de lancé sort : {{ entries[0]["cast_speed"] }}<br/>
+      Durée de l'animation d'attaque : {{ entries[0]["anim_speed"] }}<br/>
+      Vision (jour/nuit) : {{ entries[0]["vision"] }}<br/>
+      Armure : {{ entries[0]["armor"] }}<br/>
+      Vitesse d'attaque : {{ entries[0]["aspeed"] }}<br/>
+      Vitesse de déplacement : {{ entries[0]["ms"] }}
+      </p>
+  </div>
+    </div>
+{% for spell in spells %}
+  <div id ="spell">
+  <div id="spell-tooltip">{{ spell["tooltip"] }}</div>
+  <div id="spell-video">
+  <video>
+  <source src="{{ url_for('static', filename='video/' + entries[0]['name'] + '-' + spell['pos']|string() + '.webm') }}" type='video/webm; codecs="vp8, vorbis"' />
+  <img src="{{ url_for('static', filename=('video/' + entries[0]['name'] + '-' + spell['pos']|string() + '.gif')) }}" title="{{ entries[0]['name'] + '-' + spell['pos']|string() + '.gif' }}" />
+  </video>
+  </div>
+  </div>
+  {% endfor %}
 {% endblock %}
