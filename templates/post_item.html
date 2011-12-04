@@ -8,42 +8,14 @@
       <dd><input type=text {% if entries %} value="{{ entries[0]['nam'] }}" {% endif %} name="nam">
       <dt>Prix de l'objet:
       <dd><input type=text {% if entries %} value="{{ entries[0]['prix'] }}" {% endif %} name="prix">
-      <dt>Recette (format: nom-objet/nom-objet2/etcetc):
+      <dt>Recette (format: nom-objet/nom-objet2/etc):
       <dd><input type=text {% if entries %} value="{{ entries[0]['recette'] }}" {% endif %} name="recette">
-      <dt>Utilise dans ? (format: nom-objet/nom-objet2/etcetc):
+      <dt>Utilise dans ? (format: nom-objet/nom-objet2/etc):
       <dd><input type=text {% if entries %} value="{{ entries[0]['use_in'] }}" {% endif %} name="use_in">
+      <dt>Tooltip de l'item:
+      <dd><textarea rows="15" style="width:100%;" name="tooltip">{% if entries %}{{ entries[0]['tooltip'] }}{% endif %}</textarea>
       <dt>Description:
       <dd><input type=text {% if entries %} value="{{ entries[0]['des'] }}" {% endif %} name="des">
-      <dt>Force:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['str'] }}" {% endif %} name="str">
-      <dt>Agilite:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['agi'] }}" {% endif %} name="agi">
-      <dt>Intelligence:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['inte'] }}" {% endif %} name="inte">
-      <dt>Armure:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['armor'] }}" {% endif %} name="armor">
-      <dt>Vitesse d'attaque:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['aspeed'] }}" {% endif %} name="aspeed">
-      <dt>Vitesse de deplacement:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['ms'] }}" {% endif %} name="ms">
-      <dt>Vie:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['life'] }}" {% endif %} name="life">
-      <dt>Mana:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['mana'] }}" {% endif %} name="mana">
-      <dt>Degat:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['damages'] }}" {% endif %} name="damages">
-      <dt>Regeneration de vie:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['reg_life'] }}" {% endif %} name="reg_life">
-      <dt>Regeneration de mana:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['reg_mana'] }}" {% endif %} name="reg_mana">
-      <dt>Orbe:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['orb'] }}" {% endif %} name="orb">
-      <dt>Aura:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['aura'] }}" {% endif %} name="aura">
-      <dt>Capacite passive:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['cap_pas'] }}" {% endif %} name="cap_pas">
-      <dt>Capacite active:
-      <dd><input type=text {% if entries %} value="{{ entries[0]['cap_act'] }}" {% endif %} name="cap_act">
       <dd><input type=submit value="Validation">
     </dl>
   </form>

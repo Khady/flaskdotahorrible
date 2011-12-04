@@ -6,10 +6,10 @@
   <div id="hero-info">
       <p>
       <img src="{{ url_for('static', filename='hero/'+entries[0]['name']+'.png') }}" alt="{{ entries[0]['name'] }}" /><br/>
-      Type de hero: {{ entries[0]["typ"] }}<br/>
-      {{ entries[0]["str_start"] }} + {{ entries[0]["str_lvl"] }}
-      {{ entries[0]["agi_start"] }} + {{ entries[0]["agi_lvl"] }}
-      {{ entries[0]["int_start"] }} + {{ entries[0]["int_lvl"] }}<br/>
+      Type de hero: <img src="{{url_for('static', filename='images/icon/'+entries[0]['typ']|string+'.png')}}"/><br/>
+      <img src="{{url_for('static', filename='images/icon/1.png')}}"/>: {{ entries[0]["str_start"] }} + {{ entries[0]["str_lvl"] }}
+      <img src="{{url_for('static', filename='images/icon/2.png')}}"/>: {{ entries[0]["agi_start"] }} + {{ entries[0]["agi_lvl"] }}
+      <img src="{{url_for('static', filename='images/icon/3.png')}}"/>: {{ entries[0]["int_start"] }} + {{ entries[0]["int_lvl"] }}<br/>
       Vie : {{ entries[0]["life"] }}
       Mana : {{ entries[0]["mana"] }}<br/>
       {{ entries[0]["damages"] }} Porté: {{ entries[0]["rang"] }}<br/>

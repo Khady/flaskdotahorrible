@@ -36,12 +36,12 @@
         <div id="corps">
 	  {% with flashes = get_flashed_messages() %}
 	  {% if flashes %}
-	  <ul class=flashes>
+	  <p>
 	    {% for message in flashes %}
-            <li>{{ message }}
-	      {% endfor %}
-	  </ul>
-	  {% endif %}
+            {{ message }}
+        {% endfor %}
+      </p>
+      {% endif %}
 	  {% endwith %}
 	  {% block body %}{% endblock %}
         </div>

@@ -41,6 +41,7 @@ def post_hero(name=None):
                                   request.form['armor'],
                                   request.form['aspeed'],
                                   request.form['ms']])
+                    g.db.commit()
                 else:
                     g.db.execute('update hero set typ = ?, des = ?, bio = ?, str_start = ?, agi_start = ?, int_start = ?, str_lvl = ?, agi_lvl = ?, int_lvl = ?, life = ?, mana = ?, damages = ?, range = ?, cast_speed = ?, anim_speed = ?, vision = ?, armor = ?, aspeed = ?, ms = ?, nam = ? where nam like ?',
                                  [request.form['typ'], request.form['des'],
@@ -63,7 +64,7 @@ def post_hero(name=None):
                                   request.form['ms'], request.form['nam'],
                                   request.form['nam']])
                     g.db.commit()
-                    g.db.close()
+                g.db.close()
                 return redirect(url_for('hero', name = request.form['nam']))
             else:
                 if name == None:

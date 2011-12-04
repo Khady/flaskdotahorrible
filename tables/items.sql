@@ -5,20 +5,7 @@ create table items (
 	 price integer not null,
 	 recette varchar,
 	 use_in varchar,
-	 des varchar,
-	 str integer,
-	 agi integer,
-	 inte integer,
-	 armor integer,
-	 aspeed integer,
-	 ms integer,
-	 life integer,
-	 mana integer,
-	 damages integer,
-	 reg_life integer,
-	 reg_mana integer,
-	 orb varchar,
-	 aura varchar,
-	 cap_pas varchar,
-	 cap_act varchar
+	 tooltip varchar not null,
+	 tooltip_untouch varchar not null,
+	 des varchar
 );

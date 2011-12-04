@@ -2,23 +2,10 @@
 {% block body %}
 <h2>{{ entries[0]["name"] }}</h2>
 <p>
-  {{ entries[0]["prce"] }}<br/>
-  {{ entries[0]["recette"] }}<br/>
-  {{ entries[0]["use_in"] }}<br/>
-  {{ entries[0]["des"] }}<br/>
-  {{ entries[0]["str_stat"] }}<br/>
-  {{ entries[0]["agi_stat"] }}<br/>
-  {{ entries[0]["int_stat"] }}<br/>
-  {{ entries[0]["armor"] }}<br/>
-  {{ entries[0]["aspeed"] }}<br/>
-  {{ entries[0]["ms"] }}<br/>
-  {{ entries[0]["life"] }}<br/>
-  {{ entries[0]["mana"] }}<br/>
-  {{ entries[0]["reg_life"] }}<br/>
-  {{ entries[0]["reg_mana"] }}<br/>
-  {{ entries[0]["orb"] }}<br/>
-  {{ entries[0]["aura"] }}<br/>
-  {{ entries[0]["cap_pas"] }}<br/>
-  {{ entries[0]["cap_act"] }}<br/>
+  Prix total: {{ entries[0]["price"] }} piece d'or.<br/>
+  Recette : {{ entries[0]["recette"] }}<br/>
+  Utilise dans : {{ entries[0]["use_in"] }}<br/>
+<div id="tooltip">{{ entries[0]["tooltip"] }}</div>
+  {{ entries[0]["des"] }} <br/>
 </p>
 {% endblock %}

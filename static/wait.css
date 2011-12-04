@@ -7,7 +7,7 @@ body {
     background-position:center;
     background-repeat: repeat-y;*/
     color:#939393;
-    font-family: "Geneva";
+    font-family: "Geneva", "Sans";
 }
 
 body a{
@@ -194,6 +194,30 @@ padding-top: 10px;}
 #spell-tooltip {
     width: 30%;
     float: left;
+    background-color: #808080;
+    border: 1px;
+    border-color: black;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: #172025;
+    padding: 0px 10px 10px 10px;
+    font-family: "Geneva", "Sans";
+}
+
+#tooltip {
+    width: 30%;
+    background-color: #808080;
+    border: 1px;
+    border-color: black;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: #172025;
+    padding: 0px 10px 10px 10px;
+    font-family: "Geneva", "Sans";
 }
 
 #spell-video {

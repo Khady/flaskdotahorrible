@@ -1,7 +1,7 @@
 #-*- encoding: utf-8 -*-
 
 import sqlite3
-from flask import render_template, g, url_for, redirect
+from flask import render_template, g, url_for, redirect, Markup
 from dota2 import app
 
 def connect_db(base):
@@ -19,13 +19,8 @@ def item(name=None):
     else:
         cur = g.db.execute('select * from items where nam like ?', [name])
         entries = [dict(id_item=row[0], name=row[1], price=row[2],
-                        recette=row[3], use_in=row[4], des=row[5],
-                        str_stat=row[6], agi_stat=row[7], int_stat=row[8],
-                        armor=row[9], aspeed=row[10], ms=row[11], life=row[12],
-                        mana=row[13], damages=row[14], reg_life=row[15],
-                        reg_mana=row[16],
-                        orb=row[17], aura=row[18], cap_pas=row[19],
-                        cap_act=row[20]) for row in cur.fetchall()]
+                        recette=row[3], use_in=row[4], tooltip=Markup(row[5]),
+                        des=row[7]) for row in cur.fetchall()]
         if len(entries) == 0:
             g.db.close()
             return redirect(url_for('item'))

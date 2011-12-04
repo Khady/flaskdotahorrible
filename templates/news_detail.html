@@ -22,5 +22,6 @@
 {% for com in commentaire %}
 {{ com["auteur"] }}
 {{ com["comment"] }}
+<center><img src="{{url_for('static', filename='images/design/hr.png')}}" /></center>
 {% endfor %}
 {% endblock %}
