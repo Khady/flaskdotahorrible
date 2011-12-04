@@ -8,6 +8,106 @@ from post_guide import parse_balise
 from dota2 import app
 from droits import get_droits
 
+
+class guide:
+    """ Gestion des guides en base """
+    def __init__(self):
+        self._id = -1
+        self._hero = -1
+        self._heroname = ""
+        self._autor = ""
+        self._title = ""
+        self._tag = ""
+        self._diff = -1
+        self._untouch = ""
+        self._markup = ""
+        self._dateCreate = ""
+        self._dateModif = ""
+        self._valid = 0
+        self._score = 0
+
+    def setHero(self, hero):
+        self._hero = hero
+
+    def setHeroname(self, name):
+        self._heroname = name
+
+    def setAutor(self, autor):
+        self._autor = autor
+
+    def setTitle(self, title):
+        self._title = title
+
+    def setTag(self, tag):
+        self._tag = tag
+
+    def setDiff(self, diff):
+        self._diff = diff
+
+    def setUntouch(self, content):
+        self._untouch = content
+
+    def setMarkup(self, content):
+        self._markup = content
+
+    def setDateCreate(self, date):
+        self._dateCreate = date
+
+    def setDateModif(self, date):
+        self._dateModif = date
+
+    def setValid(self, valid):
+        self._valid = valid
+
+    def setScore(self, score):
+        self._score = score
+
+    def getHero(self):
+        return self._hero
+
+    def getHeroname(self):
+        return self._heroname
+
+    def getAutor(self):
+        return self._autor
+
+    def getTitle(self):
+        return self._title
+
+    def getTag(self):
+        return self._tag
+
+    def getDiff(self):
+        return self._diff
+
+    def getUntouch(self):
+        return self._untouch
+
+    def getMarkup(self):
+        return self._markup
+
+    def getDateCreate(self):
+        return self._dateCreate
+
+    def getDateModif(self):
+        return self._dateModif
+
+    def getValid(self):
+        return self._valid
+
+    def getScore(self):
+        return self._score
+
+    def setFromBase(self, gid):
+        pass
+
+    def getInDict(self):
+        pass
+
+    def save(self):
+        pass
+
+
 def connect_db(base):
     return sqlite3.connect(base)
 
