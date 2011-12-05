@@ -20,7 +20,7 @@ def item(name=None):
         cur = g.db.execute('select * from items where nam like ?', [name])
         entries = [dict(id_item=row[0], name=row[1], price=row[2],
                         recette=row[3], use_in=row[4], tooltip=Markup(row[5]),
-                        des=row[7]) for row in cur.fetchall()]
+                        des=row[7], cat=row[8]) for row in cur.fetchall()]
         if len(entries) == 0:
             g.db.close()
             return redirect(url_for('item'))

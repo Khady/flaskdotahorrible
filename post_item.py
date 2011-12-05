@@ -24,22 +24,22 @@ def post_item(name=None):
                                    [request.form['nam']])
                 entries = [dict(name=row[0]) for row in cur.fetchall()]
                 if len(entries) == 0:
-                    g.db.execute('insert into items (nam, price, recette, use_in, tooltip, tooltip_untouch, des) values (?, ?, ?, ?, ?, ?, ?)',
+                    g.db.execute('insert into items (nam, price, recette, use_in, tooltip, tooltip_untouch, des, categorie) values (?, ?, ?, ?, ?, ?, ?, ?)',
                                  [request.form['nam'], request.form['prix'],
                                   request.form['recette'],
                                   request.form['use_in'],
                                   markdown.markdown(Markup.escape(request.form['tooltip'])),
                                   request.form['tooltip'],
-                                  request.form['des']])
+                                  request.form['des'], request.form['categorie']])
                     g.db.commit()
                 else:
-                    g.db.execute('update items set price = ?, recette = ?, use_in = ?, tooltip = ?, tooltip_untouch = ?, des = ? where nam like ?',
+                    g.db.execute('update items set price = ?, recette = ?, use_in = ?, tooltip = ?, tooltip_untouch = ?, des = ?, categorie = ? where nam like ?',
                                  [request.form['prix'],
                                   request.form['recette'],
                                   request.form['use_in'],
                                   markdown.markdown(Markup.escape(request.form['tooltip'])),
                                   request.form['tooltip'],
-                                  request.form['des']])
+                                  request.form['categorie'], request.form['des']])
                     g.db.commit()
                 g.db.close()
                 return redirect(url_for('item', name = request.form['nam']))
@@ -53,7 +53,7 @@ def post_item(name=None):
                     entries = [dict(id_item=row[0], nam=row[1], prix=row[2],
                                     recette=row[3], use_in=row[4],
                                     tooltip=row[6],
-                                    des=row[7]) for row in cur.fetchall()]
+                                    des=row[7], cat=row[8]) for row in cur.fetchall()]
                     g.db.close()
                     if (len(entries) == 0):
                         return render_template('post_item.html')

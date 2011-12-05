@@ -16,6 +16,8 @@
       <dd><textarea rows="15" style="width:100%;" name="tooltip">{% if entries %}{{ entries[0]['tooltip'] }}{% endif %}</textarea>
       <dt>Description:
       <dd><input type=text {% if entries %} value="{{ entries[0]['des'] }}" {% endif %} name="des">
+      <dt>Categorie de l'objet:
+      <dd><input type=text {% if entries %} value="{{ entries[0]['cat'] }}" {% endif %} name="categorie">
       <dd><input type=submit value="Validation">
     </dl>
   </form>

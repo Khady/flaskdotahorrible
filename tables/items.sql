@@ -7,5 +7,6 @@ create table items (
 	 use_in varchar,
 	 tooltip varchar not null,
 	 tooltip_untouch varchar not null,
-	 des varchar
+	 des varchar,
+	 categorie varchar not null
 );
