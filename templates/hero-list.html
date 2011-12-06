@@ -6,38 +6,38 @@
   <h3>Force:</h3>
   {% for request in entries %}
   {% if request['des'] == 'radiant' and request['type'] == 1 %}
-  <a href= "{{ url_for('hero', name=request['name']) }}"><img src="{{ url_for('static', filename='hero/'+request['name']+'.png') }}" alt="{{ request['name'] }}" /></a><br/>
+  <a href= "{{ url_for('hero', name=request['name']) }}"><img src="{{ url_for('static', filename='hero/'+request['name']|replace(' ', '_') +'.png') }}" alt="{{ request['name'] }}" /></a><br/>
   {% endif %}
   {% endfor %}
   <h3>Agilité:</h3>
   {% for request in entries %}
   {% if request['des'] == 'radiant' and request['type'] == 2 %}
-  <a href= "{{ url_for('hero', name=request['name']) }}"><img src="{{ url_for('static', filename='hero/'+request['name']+'.png') }}" alt="{{ request['name'] }}" /></a><br/>
+  <a href= "{{ url_for('hero', name=request['name']) }}"><img src="{{ url_for('static', filename='hero/'+request['name']|replace(' ', '_') +'.png') }}" alt="{{ request['name'] }}" /></a><br/>
   {% endif %}
   {% endfor %}
 <h3>Intelligence:</h3>
   {% for request in entries %}
   {% if request['des'] == 'radiant' and request['type'] == 3 %}
-  <a href= "{{ url_for('hero', name=request['name']) }}"><img src="{{ url_for('static', filename='hero/'+request['name']+'.png') }}" alt="{{ request['name'] }}" /></a><br/>
+  <a href= "{{ url_for('hero', name=request['name']) }}"><img src="{{ url_for('static', filename='hero/'+request['name']|replace(' ', '_') +'.png') }}" alt="{{ request['name'] }}" /></a><br/>
   {% endif %}
   {% endfor %}
 <h2><center><u>Le Dire</u></center></h2>
   <h3>Force:</h3>
   {% for request in entries %}
   {% if request['des'] == 'dire' and request['type'] == 1 %}
-  <a href= "{{ url_for('hero', name=request['name']) }}"><img src="{{ url_for('static', filename='hero/'+request['name']+'.png') }}" alt="{{ request['name'] }}" /></a><br/>
+  <a href= "{{ url_for('hero', name=request['name']) }}"><img src="{{ url_for('static', filename='hero/'+request['name']|replace(' ', '_') +'.png') }}" alt="{{ request['name'] }}" /></a><br/>
   {% endif %}
   {% endfor %}
   <h3>Agilité:</h3>
   {% for request in entries %}
   {% if request['des'] == 'dire' and request['type'] == 2 %}
-  <a href= "{{ url_for('hero', name=request['name']) }}"><img src="{{ url_for('static', filename='hero/'+request['name']+'.png') }}" alt="{{ request['name'] }}" /></a><br/>
+  <a href= "{{ url_for('hero', name=request['name']) }}"><img src="{{ url_for('static', filename='hero/'+request['name']|replace(' ', '_') +'.png') }}" alt="{{ request['name'] }}" /></a><br/>
   {% endif %}
   {% endfor %}
 <h3>Intelligence:</h3>
   {% for request in entries %}
   {% if request['des'] == 'dire' and request['type'] == 3 %}
-  <a href= "{{ url_for('hero', name=request['name']) }}"><img src="{{ url_for('static', filename='hero/'+request['name']+'.png') }}" alt="{{ request['name'] }}" /></a><br/>
+  <a href= "{{ url_for('hero', name=request['name']) }}"><img src="{{ url_for('static', filename='hero/'+request['name']|replace(' ', '_') +'.png') }}" alt="{{ request['name'] }}" /></a><br/>
   {% endif %}
   {% endfor %}
 </p>
