@@ -5,5 +5,6 @@ create table spells (
 	 nam varchar not null,
 	 tooltip varchar not null,
 	 tooltip_untouch varchar not null,
-	 pos integer
+	 pos integer,
+	 des integer
 );

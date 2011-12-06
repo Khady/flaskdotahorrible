@@ -114,6 +114,21 @@ h1 {
     color:#E03206;
     text-decoration: none;}
 
+#menu-stream {
+    float: left;
+    width: 80px;
+    height:50px;
+    padding-top: 20px;
+    padding-left: 50px;
+    color:#E03206;
+    text-decoration: none;
+    font-family: "Geneva";
+    font-size: 1.20em;}
+
+#menu-stream a{
+    color:#E03206;
+    text-decoration: none;}
+
 #menu-contact {
     float: left;
     width: 80px;
@@ -132,14 +147,13 @@ h1 {
 #fond {
     padding-top: 240px;
     margin: auto;
-    background-image:url(images/design/top_bg.jpg);
+    background-image:url('images/design/top_bg.jpg');
     background-repeat:no-repeat;
     background-position: top center;
 }
 
 #contenu {
     color:grey;
-    background-color:#160203;
     background-image:url('images/design/main.jpg');
     background-position:center;
     background-repeat: repeat-y;

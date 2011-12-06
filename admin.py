@@ -89,7 +89,6 @@ def guide_validation():
                                       guide['heroname'],
                                       guide['diff'],
                                       guide['content'],
-                                      guide['content_markup'],
                                       guide['date_last_modif'],
                                       1])
                 g.db.commit()

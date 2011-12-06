@@ -1,3 +1,4 @@
+#-*- encoding: utf-8 -*-
 
 from flask import Flask, url_for, redirect
 
@@ -24,10 +25,12 @@ from groups import *
 from item import *
 from news import *
 from admin import *
+from contact import *
+from stream import *
 
 @app.route('/', methods=['GET'])
 def default():
-    uni = u'Bienvenue sur Dota 2 Arena'.encode('utf-8')
+    uni = u'Bienvenue sur Dota 2 Arena'
     flash(uni)
     return news()
 
