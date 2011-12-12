@@ -1,6 +1,7 @@
 drop table if exists guide;
 create table guide (
-  id INTEGER PRIMARY KEY  AUTOINCREMENT  NOT NULL  UNIQUE,
+  id INTEGER  NOT NULL,
+  guide_id integer,
   hero integer not null,
   heroname varchar not null,
   autor integer not null,
@@ -12,5 +13,6 @@ create table guide (
   date_create date not null,
   date_last_modif date not null,
   valid integer not null,
-  score integer no null
+  score integer no null,
+  PRIMARY KEY (id, guide_id)
 );

@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block body %}
 <a href="{{ url_for('user_adm') }}">Utilisateur</a><br />
-{% if droits['groupe'] == 1 %}
+{% if droits['adm'] == 1 or droits['groupe'] == 1 %}
 <a href="{{ url_for('groups') }}">Groupes</a><br />
 {% endif %}
-{% if droits['guide_validation'] == 1 %}
+{% if droits['adm'] == 1 or droits['guide'] == 1 %}
 <a href="{{ url_for('guide_validation') }}">Guides</a><br />
 {% endif %}
 {% endblock %}

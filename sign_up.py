@@ -51,9 +51,9 @@ def activate(code_val=None):
 @app.route('/signup', methods=['GET', 'POST'])
 def add_user():
     error = None
-    # if session.get('logged_in'):
-    #     error = 'You are already member'
-    #     return render_template('sign_up.html', error=error)
+    if session['logged_in']:
+        error = 'You are already member'
+        return render_template('sign_up.html', error=error)
     if request.method == 'POST':
         g.db = connect_db(app.config['USER_DB'])
 

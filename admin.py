@@ -12,6 +12,7 @@ from flask import request, session, g, redirect, url_for, \
 import Mail
 from dota2 import app
 from droits import *
+from hashlib import sha1
 
 def connect_db(base):
     return sqlite3.connect(base)
@@ -21,6 +22,7 @@ def admin():
     g.db = connect_db(app.config['USER_DB'])
     if 'logged_in' in session:
         droits = get_droits(session['user_id'])
+        print droits
     else:
         return redirect(url_for('default'))
     g.db.close()
@@ -33,6 +35,7 @@ def user_adm():
     if request.method == 'GET':
         return render_template('user_adm.html')
     else:
+        g.db = connect_db(app.config['USER_DB'])
         password = request.form['password']
         pass_hash = sha1(password.encode('utf-8')).hexdigest()
         mail = request.form['mail'].lower()
@@ -40,57 +43,49 @@ def user_adm():
             g.db.execute('update user_description set mail = ? where id = ?', [mail, session['user_id']])
         if len(password) != 0:
             g.db.execute('update user_description set hash = ? where id = ?', [pass_hash, session['user_id']])
+        g.db.commit()
+        g.db.close()
         return redirect(url_for('user_adm'))
 
 @app.route('/admin/guides', methods=['GET', 'POST'])
 def guide_validation():
     g.db = connect_db(app.config['USER_DB'])
-    if 'logged_in' not in session or get_droits(session['user_id'])['guide_validation'] != 1:
+    droits = get_droits(session['user_id'])
+    if 'logged_in' not in session or (droits['guide'] != 1 and droits['adm'] != 1):
         return redirect(url_for('default'))
-    cur = g.db.execute('select id, title, hero, heroname, score, valid from guide')
-    guides = [dict(id=row[0], titre=row[1], hero=row[2], heroname=row[3],
-                   score=row[4], valid=row[5]) for row in cur.fetchall()]
-    cur = g.db.execute('select id, title, hero, heroname, score, valid, id_guide from guidetmp')
-    guidestmp = [dict(id=row[0], titre=row[1], hero=row[2], heroname=row[3],
-                      score=row[4], valid=row[5], id_guide=row[6]) for row in cur.fetchall()]
-    print guides
+    cur = g.db.execute('select id, guide_id, title, hero, heroname, score, valid from guide where valid = ?', [1])
+    guides = [dict(id=row[0], id_guide=row[1], titre=row[2], hero=row[3], heroname=row[4],
+                   score=row[5], valid=row[6], uid=str(row[0]) + "-" + str(row[1]))
+              for row in cur.fetchall()]
+
+    cur = g.db.execute('select id, guide_id, title, hero, heroname, score, valid from guide where valid != ?', [1])
+    guidestmp = [dict(id=row[0], id_guide=row[1], titre=row[2], hero=row[3], heroname=row[4],
+                   score=row[5], valid=row[6], uid=str(row[0]) + "-" + str(row[1]))
+                 for row in cur.fetchall()]
+    g.db.close()
     if request.method != 'GET':
+        g.db = connect_db(app.config['USER_DB'])
         if request.form['submit'] == 'Valider':
             for guide in guides:
                 guide['valid'] = int(request.form[guide['heroname']])
                 if guide['valid'] == 2:
-                    g.db.execute('delete from guide where id = ?', [guide['id']])
+                    g.db.execute('delete from guide where id = ? and valid = ?', [guide['id'], 1])
                 else:
-                    g.db.execute('update guide set valid = ? where id = ?', [guide['valid'], guide['id']])
+                    g.db.execute('update guide set valid = ? where id = ? and valid = ?',
+                                 [guide['valid'], guide['id'], 1])
                 g.db.commit()
             g.db.close()
         else:
             for guide in guidestmp:
-                guide['valid'] = int(request.form[guide['heroname']])
+                guide['valid'] = int(request.form[guide['uid']])
                 if guide['valid'] == 2:
-                    g.db.execute('delete from guide where id = ?', [guide['id']])
+                    g.db.execute('delete from guide where id = ? and gid = ?',
+                                 [guide['id'], guide['id_guide']])
                 elif guide['valid'] == 1:
-                    if guide['id_guide'] == None:
-                        g.db.execute('insert into guidetmp (title, tag, hero, heroname, difficulties, content_untouch, content_markup, date_last_modif, valid) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                                     [guide['titre'],
-                                      guide['tag'],
-                                      guide['hero'],
-                                      guide['heroname'],
-                                      guide['diff'],
-                                      guide['content'],
-                                      guide['content_markup'],
-                                      guide['date_last_modif'],
-                                      1])
-                    else:
-                        g.db.execute('update guide set title = ?, tag = ?, hero = ?, heroname = ?, difficulties = ?, content_untouch = ?, content_markup = ?, date_last_modif = ?, valid = ?'
-                                     [guide['titre'],
-                                      guide['tag'],
-                                      guide['hero'],
-                                      guide['heroname'],
-                                      guide['diff'],
-                                      guide['content'],
-                                      guide['date_last_modif'],
-                                      1])
+                    g.db.execute('delete from guide where id = ? and valid = ?',
+                                 [guide['id'], 1])
+                    g.db.execute('update guide set valid = ? where id = ? and guide_id = ?',
+                                 [1, guide['id'], guide['id_guide']])
                 g.db.commit()
-            g.db.close()
+                g.db.close()
     return render_template('guides_adm.html', guides=guides, guidestmp=guidestmp)

@@ -3,11 +3,12 @@
 import sqlite3
 import re
 import Mail
-from flask import render_template, g, url_for, redirect, request, Markup, session
+from flask import render_template, g, url_for, redirect, request, Markup, session, flash
 from markdown import markdown
 from dota2 import app
 from droits import get_droits
 from datetime import datetime
+from guide_class import Guide
 
 def connect_db(base):
     return sqlite3.connect(base)
@@ -21,14 +22,16 @@ def parse_tbl(content, heroname):
     spells = [row[0] for row in cur.fetchall()]
     i = 0
     guide = ""
+    print tableaux
     for tab in tableaux:
+        print "tab", tab
         guide += contenttmp[i]
         i += 1
         guide += "<table border><caption>Sorts</caption>"
         tab = re.findall(r'[1-5]', tab)
         for ligne in range(5):
-            # guide += "<tr><td>sort %i</td>" % (ligne + 1)
-            guide += "<tr><td>%s</td>" % (spells[i])
+            guide += "<tr><td>sort %i</td>" % (ligne + 1)
+            #guide += "<tr><td>%s</td>" % (spells[ligne])
             for lvl in range(len(tab)):
                 guide += "<td>"
                 if ligne + 1 == int(tab[lvl]):
@@ -54,7 +57,7 @@ def parse_hero(content):
         hroname = re.search(r'=[a-zA-Z]*', hro).group(0)[1:]
         cur = g.db.execute('select * from hero where nam like ?', [hroname])
         hroinfos = [dict(name=row[1]) for row in cur.fetchall()]
-        if len(hroinfos) != 0:
+        if len(hroinfos):
             guide += '<a href="%s">%s</a>' % (url_for('hero', name = hroname), hroname)
         else:
             guide += "erreur : %s" % hro
@@ -113,7 +116,6 @@ def parse_balise(content, heroname):
     content = parse_spell(content)
     return content
 
-
 def valid_guide(heros):
     error = None
     if len(request.form['titre']) == 0:
@@ -122,7 +124,7 @@ def valid_guide(heros):
         error = "Pas de contenu"
     elif len(request.form['difficulte']) == 0:
         error = "Pas de difficulte"
-    if error != None:
+    if error is not None:
         hid = request.form['hero']
         titre=request.form['titre']
         content=request.form['content']
@@ -135,49 +137,49 @@ def valid_guide(heros):
         return True
 
 def add_guide(valid):
+    guide = Guide()
+    guide.id         = -1
+    guide.gid        = 0
+    guide.hero       = request.form['hero']
     g.db = connect_db(app.config['USER_DB'])
-    if valid == 0:
-        base = 'guidetmp'
-    else:
-        base = 'guide'
-    g.db.execute('insert into %s (title, autor, tag, hero, heroname, difficulties, content_untouch, content_markup, date_create, date_last_modif, valid, score) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)' % base,
-                 [request.form['titre'],
-                  session['user_login'],
-                  request.form['tag'],
-                  request.form['hero'],
-                  get_heroName(request.form['hero']),
-                  request.form['difficulte'],
-                  request.form['content'],
-                  markdown(Markup.escape(request.form['content'])),
-                  datetime.today(), datetime.today(),
-                  valid, 0])
-    g.db.commit()
+    guide.heroname   = get_heroName(request.form['hero'])
     g.db.close()
+    guide.autor      = session['user_login']
+    guide.title      = request.form['titre']
+    guide.tag        = request.form['tag']
+    guide.diff       = request.form['difficulte']
+    guide.untouch    = request.form['content']
+    guide.markup     = markdown(Markup.escape(request.form['content']))
+    guide.dateCreate = datetime.today()
+    guide.dateModif  = datetime.today()
+    guide.valid      = valid
+    guide.score      = 0
+    guide.save()
 
-def update_guide(id_guide):
+
+def update_guide(id_guide, valid):
+    guide = Guide()
+    guide.get_frombase(id_guide, 0, 1)
+    guide.id         = id_guide
+    guide.hero       = request.form['hero']
     g.db = connect_db(app.config['USER_DB'])
-    g.db.execute('insert into guidetmp (id_guide, title, tag, hero, heroname, difficulties, content_untouch, content_markup, date_last_modif, valid) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                 [id_guide,
-                  request.form['titre'],
-                  request.form['tag'],
-                  request.form['hero'],
-                  get_heroName(request.form['hero']),
-                  request.form['difficulte'],
-                  request.form['content'],
-                  markdown(Markup.escape(request.form['content'])),
-                  datetime.today(),
-                  0])
-    # g.db.execute('update guidetmp set title = ?, tag = ?, hero = ?, heroname = ?, difficulte = ?, content_untouch = ?, content_markup = ?, date_last_modif = ?, valid = ? where id_guide = ?',
-    #              [request.form['titre'],
-    #               request.form['tag'],
-    #               request.form['hero'],
-    #               get_heroName(request.form['hero']),
-    #               request.form['difficulte'],
-    #               request.form['content'],
-    #               parse_balise(markdown(Markup.escape(request.form['guide'])), get_heroName(request.form['hero'])),
-    #               datetime.today(), 0, id_guide])
-    g.db.commit()
+    guide.heroname   = get_heroName(request.form['hero'])
     g.db.close()
+    guide.title      = request.form['titre']
+    guide.tag        = request.form['tag']
+    guide.diff       = request.form['difficulte']
+    guide.untouch    = request.form['content']
+    guide.markup     = markdown(Markup.escape(request.form['content']))
+    guide.dateModif  = datetime.today()
+    guide.valid      = valid
+    if valid == 1:
+        guide.gid        = -1
+    else:
+        guide.gid        = guide.new_gid(id_guide)
+    if valid == -1:
+        guide.gid = 1
+        guide.valid = 1
+    guide.save()
 
 def get_heros():
     #g.db = connect_db(app.config['USER_DB'])
@@ -194,8 +196,9 @@ def get_heroName(id_hero):
 def isGuideCreator(uid, id_guide):
     g.db = connect_db(app.config['USER_DB'])
     cur = g.db.execute('select autor from guide where id = ?', [id_guide])
-    autor = cur.fetch()[0]
-    if autor == uid:
+    autor = cur.fetchall()
+    g.db.close()
+    if len(autor) != 0 and uid == autor[0]:
         return True
     return False
 
@@ -209,22 +212,23 @@ def mail_guide(id_guide):
         mail = [row[0] for row in cur.fetchall()][0]
         Mail.send(mail, "Nouveau guide",
                   ("Un nouveau guide (ou une mise a jour d'un guide) est disponible.\n%s"
-                   % url_for('guide', id_guide = id_guide)))
+                   % url_for('guide', id = id_guide)))
 
 @app.route('/post_guide/', methods = ['GET', 'POST'])
 @app.route('/post_guide/<int:id_guide>', methods = ['GET', 'POST'])
 def post_guide(id_guide=None):
     if 'logged_in' in session:
         uid = session['user_id']
+        nameid = session['user_login']
         g.db = connect_db(app.config['USER_DB'])
         droits = get_droits(uid)
         heros = get_heros()
         g.db.close()
         herolen = len(heros)
         if id_guide != None:
-            if isGuideCreator(uid, id_guide) != True and droits['guide'] != 1:
-                # flash("Vous n'avez pas les droits pour editer ce guide")
-                return (url_for('guide', id_guide = id_guide))
+            if isGuideCreator(nameid, id_guide) != True and droits['adm'] != 1:
+                flash(u"Vous n'avez pas les droits pour éditer ce guide")
+                return redirect(url_for('guide', id = id_guide))
         if (request.method == 'POST'):
             if request.form['mode_post'] == 'Previsualisation':
                 guide = (Markup.escape(request.form['content']))
@@ -245,12 +249,17 @@ def post_guide(id_guide=None):
                 val = valid_guide(heros)
                 if val != True:
                     return val
-                # flash('Ce guide doit maintenant etre valide, il sera disponible sous peu.')
+                flash(u'Ce guide doit maintenant être validé, il sera disponible sous peu.')
                 # mail_guide(id_guide)
                 if (id_guide == None):
                     id_guide = add_guide(droits['guide'])
                 else:
-                    update_guide(id_guide)
+                    if droits['guide'] == 1 or droits['adm'] == 1:
+                        drts = -1
+                    else:
+                        drts = 0
+                    print "on update"
+                    update_guide(id_guide, drts)
         else:
             if (id_guide == None):
                 return render_template('post_guide.html', hero=heros, herolen=herolen)
@@ -271,4 +280,4 @@ def post_guide(id_guide=None):
                                            titre=titre, tag=tag, content=guide, diff=diff)
                 else:
                     return render_template('post_guide.html', hero=heros, herolen=herolen)
-    return redirect(url_for('guide', id_guide=id_guide))
+    return redirect(url_for('guide', id=id_guide))
