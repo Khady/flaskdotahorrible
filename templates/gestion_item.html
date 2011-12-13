@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Gestion des objets</h2>
+
+  <h3><a href="{{url_for('post_item')}}">Poster un nouvel objet</a></h3>
+
+  <table>
+    <tr>
+      <th>Nom</th>
+      <th>Action</th>
+    </tr>
+    {% for item in entries %}
+    <tr>
+      <td>{{item['name']}}</td>
+      <td><a href="{{url_for('post_item', name=item['name'])}}">Modifier</a> <a href="{{url_for('gestion_item', id=item['id'])}}">Supprimer</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Gestion des commentaires</h2>
+
+  <table>
+    <tr>
+      <th>Auteur</th>
+      <th>Contenu</th>
+      <th>Action</th>
+    </tr>
+    {% for comment in entries %}
+    <tr>
+      <td>{{comment['auteur']}}</td>
+      <td>{{comment['contenu']}}</td>
+      <td><form action="{{ url_for('post_comment', id_comment=comment['id']) }}" method=post> <input type="submit" name="mode_post" value="Edition" /></form> <a href="{{url_for('gestion_commentaire', id=comment['id'])}}">Supprimer</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

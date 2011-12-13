@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Gestion des heros</h2>
+
+  <h3><a href="{{url_for('post_hero')}}">Poster un nouveau hero</a></h3>
+
+  <table>
+    <tr>
+      <th>Nom</th>
+      <th>Action</th>
+    </tr>
+    {% for hero in entries %}
+    <tr>
+      <td>{{hero['name']}}</td>
+      <td><a href="{{url_for('post_hero', name=hero['name'])}}">Modifier</a> <a href="{{url_for('gestion_hero', id=hero['id'])}}">Supprimer</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

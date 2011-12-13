@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Gestion des news</h2>
+
+  <h3><a href="{{url_for('post_news')}}">Poster une nouvelle news</a></h3>
+
+  <table>
+    <tr>
+      <th>Titre</th>
+      <th>Action</th>
+    </tr>
+    {% for news in entries %}
+    <tr>
+      <td>{{news['titre']}}</td>
+      <td><a href="{{url_for('post_news', id_news=news['id'])}}">Modifier</a> <a href="{{url_for('gestion_news', id=news['id'])}}">Supprimer</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

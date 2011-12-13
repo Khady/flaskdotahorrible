@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+  <h2>Gestion des sorts</h2>
+
+  <h3><a href="{{url_for('post_spell')}}">Poster un nouveau sort</a></h3>
+
+  <table>
+    <tr>
+      <th>Nom</th>
+      <th>Action</th>
+    </tr>
+    {% for spell in entries %}
+    <tr>
+      <td>{{spell['name']}}</td>
+      <td><a href="{{url_for('post_spell', name=spell['name_hero'], pos=spell['pos'])}}">Modifier</a> <a href="{{url_for('gestion_spell', id=spell['id'])}}">Supprimer</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
