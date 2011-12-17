@@ -27,6 +27,11 @@ from news import *
 from admin import *
 from contact import *
 from stream import *
+from gestion_news import *
+from gestion_commentaire import *
+from gestion_hero import *
+from gestion_item import *
+from gestion_spell import *
 
 @app.route('/', methods=['GET'])
 def default():

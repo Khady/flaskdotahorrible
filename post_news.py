@@ -48,6 +48,7 @@ def post_news(id_news=None):
                                    tag=request.form['tag'])
                     return render_template('post_news.html', entries=entries,
                                            prevu=1,
+                                           id_news=id_news,
                                            titre=request.form['titre'],
                                            news=Markup(markdown.markdown(news)),
                                            tag=request.form['tag'])

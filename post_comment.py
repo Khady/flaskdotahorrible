@@ -6,6 +6,7 @@ import unicodedata as ud
 from flask import render_template, g, url_for, redirect, request, Markup, session
 from dota2 import app
 from datetime import datetime
+from droits import get_droits
 
 def connect_db(base):
     return sqlite3.connect(base)
@@ -24,14 +25,17 @@ def post_comment(id_genre=None):
             if request.form['mode_post'] == 'Edition':
                 id_comment = request.args.get('id_comment', '')
                 if id_comment != None:
+                    g.db = connect_db(app.config['USER_DB'])
                     cur = g.db.execute('select * from commentaire where id = ?',
                                        [id_comment])
                     entries = [dict(id_genre=row[1], autor=row[3],
                                     genre=row[2], comment=row[4]) for row in cur.fetchall()]
-                    g.db.close()
-                    if (entries[0]['autor'] != session['user_login']):
+                    if not (entries[0]['autor'] == session['user_login'] or (entries[0]['autor'] != session['user_login'] and get_droits(session['user_id'])['news'] == 1)
+                            or (entries[0]['autor'] != session['user_login'] and get_droits(session['user_id'])['adm'] == 1)):
+                        g.db.close()
                         return redirect(url_for('default'))
                     else:
+                        g.db.close()
                         return render_template('post_comment.html',
                                                id_comment=id_comment,
                                                entries=entries[0])
@@ -57,13 +61,15 @@ def post_comment(id_genre=None):
                 cur = g.db.execute('select * from commentaire where id = ?', [id_comment])
                 entries = [dict(id_genre=row[1], autor=row[4],
                                 genre=row[2]) for row in cur.fetchall()]
-                if (entries[0]['autor'] != session['user_login']):
+                if not (entries[0]['autor'] == session['user_login'] or (entries[0]['autor'] != session['user_login'] and get_droits(session['user_id'])['news'] == 1)
+                        or (entries[0]['autor'] != session['user_login'] and get_droits(session['user_id'])['adm'] == 1)):
                     g.db.close()
                     return redirect(url_for('default'))
                 g.db.execute('update commentaire set content_untouch = ?, content_markup = ?, date_last_modif = ? where id = ?',
                              [request.form['comment'],
                               markdown.markdown(Markup.escape(request.form['comment'])),
                               datetime.today(), id_comment])
+                g.db.commit()
                 g.db.close()
                 if (entries[0]['genre'] == 'news'):
                     return redirect(url_for('news', id_news=id_genre))
